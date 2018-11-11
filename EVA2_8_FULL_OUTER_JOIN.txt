@@ -1,0 +1,2085 @@
+full outer join
+orders (2)
+customers (4)
+
+
+a.orderid, b.customerid, b.companyname
+
+836 registros
+
+
+MySQL Shell 8.0.12
+
+Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+
+
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+
+ MySQL  SQL > \connect --mysql root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': ****
+Save password for 'root@localhost:3306'? [Y]es/[N]o/Ne[v]er (default No): n
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 1
+Server version: 5.5.61 MySQL Community Server (GPL)
+No default schema selected; type \use <schema> to set one.
+
+ MySQL  localhost:3306  SQL > \use evaluacion_2
+Default schema set to `evaluacion_2`.
+Fetching table and column names from `evaluacion_2` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:3306  evaluacion_2  SQL > show tables;
++------------------------+
+| Tables_in_evaluacion_2 |
++------------------------+
+| a                      |
+| b                      |
+| tablaa                 |
+| tablab                 |
++------------------------+
+4 rows in set (0.0005 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
+|  5 | E      |
++----+--------+
+5 rows in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablab;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | X      |
+|  4 | Y      |
+|  5 | Z      |
++----+--------+
+5 rows in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa, tablab;
++----+--------+----+--------+
+| id | nombre | id | nombre |
++----+--------+----+--------+
+|  1 | A      |  1 | A      |
+|  2 | B      |  1 | A      |
+|  3 | C      |  1 | A      |
+|  4 | D      |  1 | A      |
+|  5 | E      |  1 | A      |
+|  1 | A      |  2 | B      |
+|  2 | B      |  2 | B      |
+|  3 | C      |  2 | B      |
+|  4 | D      |  2 | B      |
+|  5 | E      |  2 | B      |
+|  1 | A      |  3 | X      |
+|  2 | B      |  3 | X      |
+|  3 | C      |  3 | X      |
+|  4 | D      |  3 | X      |
+|  5 | E      |  3 | X      |
+|  1 | A      |  4 | Y      |
+|  2 | B      |  4 | Y      |
+|  3 | C      |  4 | Y      |
+|  4 | D      |  4 | Y      |
+|  5 | E      |  4 | Y      |
+|  1 | A      |  5 | Z      |
+|  2 | B      |  5 | Z      |
+|  3 | C      |  5 | Z      |
+|  4 | D      |  5 | Z      |
+|  5 | E      |  5 | Z      |
++----+--------+----+--------+
+25 rows in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select distinct(*) from tablaa, tablab;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*) from tablaa, tablab' at line 1
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa UNION ALL
+                                        ... select * from tablab;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
+|  5 | E      |
+|  1 | A      |
+|  2 | B      |
+|  3 | X      |
+|  4 | Y      |
+|  5 | Z      |
++----+--------+
+10 rows in set (0.0005 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa
+                                        ... inner join tablab
+                                        ... on tablaa.id = tablab.id;
++----+--------+----+--------+
+| id | nombre | id | nombre |
++----+--------+----+--------+
+|  1 | A      |  1 | A      |
+|  2 | B      |  2 | B      |
+|  3 | C      |  3 | X      |
+|  4 | D      |  4 | Y      |
+|  5 | E      |  5 | Z      |
++----+--------+----+--------+
+5 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa inner join tablab on tablaa.id = tablab.id
+                                        ... UNION ALL
+                                        ... select * from tablaa right join tablab on tablaa.id = tablab.id;
++----+--------+----+--------+
+| id | nombre | id | nombre |
++----+--------+----+--------+
+|  1 | A      |  1 | A      |
+|  2 | B      |  2 | B      |
+|  3 | C      |  3 | X      |
+|  4 | D      |  4 | Y      |
+|  5 | E      |  5 | Z      |
+|  1 | A      |  1 | A      |
+|  2 | B      |  2 | B      |
+|  3 | C      |  3 | X      |
+|  4 | D      |  4 | Y      |
+|  5 | E      |  5 | Z      |
++----+--------+----+--------+
+10 rows in set (0.0009 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa inner join tablab on tablaa.id = tablab.id UNION ALL select * from tablaa right join tablab on tablaa.id = tablab.id;
++----+--------+----+--------+
+| id | nombre | id | nombre |
++----+--------+----+--------+
+|  1 | A      |  1 | A      |
+|  2 | B      |  2 | B      |
+|  3 | C      |  3 | X      |
+|  4 | D      |  4 | Y      |
+|  5 | E      |  5 | Z      |
+|  1 | A      |  1 | A      |
+|  2 | B      |  2 | B      |
+|  3 | C      |  3 | X      |
+|  4 | D      |  4 | Y      |
+|  5 | E      |  5 | Z      |
++----+--------+----+--------+
+10 rows in set (0.0007 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa inner join tablab on tablaa.nombre = tablab.nombre UNION ALL select * from tablaa right join tablab on tablaa.id = tablab.id;
++----+--------+----+--------+
+| id | nombre | id | nombre |
++----+--------+----+--------+
+|  1 | A      |  1 | A      |
+|  2 | B      |  2 | B      |
+|  1 | A      |  1 | A      |
+|  2 | B      |  2 | B      |
+|  3 | C      |  3 | X      |
+|  4 | D      |  4 | Y      |
+|  5 | E      |  5 | Z      |
++----+--------+----+--------+
+7 rows in set (0.0006 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select tablaa.id, tablaa.nombre from tablaa inner join tablab on tablaa.nombre = tablab.nombre UNION ALL select tablaa.id,tablaa.nombre from tablaa right join tablab on tablaa.id = tablab.id;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
+|  5 | E      |
++----+--------+
+7 rows in set (0.0007 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select tablaa.id, tablaa.nombre from tablaa inner join tablab on tablaa.nombre = tablab.nombre UNION ALL select tablaa.id,tablaa.nombre from tablaa right join tablab on tablaa.nombre = tablab.nombre;
++------+--------+
+| id   | nombre |
++------+--------+
+|    1 | A      |
+|    2 | B      |
+|    1 | A      |
+|    2 | B      |
+| NULL | NULL   |
+| NULL | NULL   |
+| NULL | NULL   |
++------+--------+
+7 rows in set (0.0006 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa outer join tablab on tablaa.nombre = tablab.nombre;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'outer join tablab on tablaa.nombre = tablab.nombre' at line 1
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa outer join tablab on tablaa.nombre = tablab.nombre;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'outer join tablab on tablaa.nombre = tablab.nombre' at line 1
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa right join tablab on tablaa.nombre = tablab.nombre;
++------+--------+----+--------+
+| id   | nombre | id | nombre |
++------+--------+----+--------+
+|    1 | A      |  1 | A      |
+|    2 | B      |  2 | B      |
+| NULL | NULL   |  3 | X      |
+| NULL | NULL   |  4 | Y      |
+| NULL | NULL   |  5 | Z      |
++------+--------+----+--------+
+5 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select tablaa.id, tablaa.nombre from tablaa right join tablab on tablaa.nombre = tablab.nombre;
++------+--------+
+| id   | nombre |
++------+--------+
+|    1 | A      |
+|    2 | B      |
+| NULL | NULL   |
+| NULL | NULL   |
+| NULL | NULL   |
++------+--------+
+5 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select tablaa.id, tablaa.nombre from tablaa inner join tablab on tablaa.nombre = tablab.nombre UNION ALL select tablaa.id,tablaa.nombre from tablaa right join tablab on tablaa.nombre = tablab.nombre;
++------+--------+
+| id   | nombre |
++------+--------+
+|    1 | A      |
+|    2 | B      |
+|    1 | A      |
+|    2 | B      |
+| NULL | NULL   |
+| NULL | NULL   |
+| NULL | NULL   |
++------+--------+
+7 rows in set (0.0006 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select tablaa.id, tablaa.nombre from tablaa inner join tablab on tablaa.nombre = tablab.nombre UNION ALL select tablaa.id,tablaa.nombre from tablaa right join tablab on tablaa.nombre = tablab.nombre UNION ALL select * from tablaa left join tablab on tablaa.nombre = tablab.nombre;
+ERROR: 1222 (21000): The used SELECT statements have a different number of columns
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa inner join tablab on tablaa.nombre = tablab.nombre UNION ALL select * from tablaa right join tablab on tablaa.nombre = tablab.nombre UNION ALL select * from tablaa left join tablab on tablaa.nombre = tablab.nombre;
++------+--------+------+--------+
+| id   | nombre | id   | nombre |
++------+--------+------+--------+
+|    1 | A      |    1 | A      |
+|    2 | B      |    2 | B      |
+|    1 | A      |    1 | A      |
+|    2 | B      |    2 | B      |
+| NULL | NULL   |    3 | X      |
+| NULL | NULL   |    4 | Y      |
+| NULL | NULL   |    5 | Z      |
+|    1 | A      |    1 | A      |
+|    2 | B      |    2 | B      |
+|    3 | C      | NULL | NULL   |
+|    4 | D      | NULL | NULL   |
+|    5 | E      | NULL | NULL   |
++------+--------+------+--------+
+12 rows in set (0.0006 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa inner join tablab on tablaa.nombre = tablab.nombre UNION ALL select * from tablaa right join tablab on tablaa.nombre = tablab.nombre UNION ALL select * from tablaa left join tablab on tablaa.nombre = tablab.nombre;
++------+--------+------+--------+
+| id   | nombre | id   | nombre |
++------+--------+------+--------+
+|    1 | A      |    1 | A      |
+|    2 | B      |    2 | B      |
+|    1 | A      |    1 | A      |
+|    2 | B      |    2 | B      |
+| NULL | NULL   |    3 | X      |
+| NULL | NULL   |    4 | Y      |
+| NULL | NULL   |    5 | Z      |
+|    1 | A      |    1 | A      |
+|    2 | B      |    2 | B      |
+|    3 | C      | NULL | NULL   |
+|    4 | D      | NULL | NULL   |
+|    5 | E      | NULL | NULL   |
++------+--------+------+--------+
+12 rows in set (0.0006 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select tablaa.id, tablaa.nombre from tablaa right join tablab on tablaa.nombre = tablab.nombre;
++------+--------+
+| id   | nombre |
++------+--------+
+|    1 | A      |
+|    2 | B      |
+| NULL | NULL   |
+| NULL | NULL   |
+| NULL | NULL   |
++------+--------+
+5 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa a inner join tablab b
+                                        ... on a.nombre = b.nombre
+                                        ... UNION ALL
+                                        ... select * from tablaa a left join tabla b on a.nombre = b.nombre where b.id is null;
+ERROR: 1146 (42S02): Table 'evaluacion_2.tabla' doesn't exist
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa a inner join tablab b on a.nombre = b.nombre UNION ALL select * from tablaa a left join tabla b on a.nombre = b.nombre where b.id is null;
+ERROR: 1146 (42S02): Table 'evaluacion_2.tabla' doesn't exist
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa a inner join tablab b on a.nombre = b.nombre UNION ALL select * from tablaa a left join tabla b on a.nombre = b.nombre;
+ERROR: 1146 (42S02): Table 'evaluacion_2.tabla' doesn't exist
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
+|  5 | E      |
++----+--------+
+5 rows in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa a inner join tablab b on a.nombre = b.nombre UNION ALL select * from tablaa a left join tabla b on a.nombre = b.nombre;
+ERROR: 1146 (42S02): Table 'evaluacion_2.tabla' doesn't exist
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select tablaa.id, tablaa.nombre from tablaa right join tablab on tablaa.nombre = tablab.nombre;
++------+--------+
+| id   | nombre |
++------+--------+
+|    1 | A      |
+|    2 | B      |
+| NULL | NULL   |
+| NULL | NULL   |
+| NULL | NULL   |
++------+--------+
+5 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa a inner join tablab b on a.nombre = b.nombre UNION ALL select * from tablaa a left join tabla b on a.nombre = b.nombre where a.id is null;
+ERROR: 1146 (42S02): Table 'evaluacion_2.tabla' doesn't exist
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select * from tablaa a inner join tablab b on a.nombre = b.nombre UNION ALL select * from tablaa a left join tabla b on a.nombre = b.nombre;
+ERROR: 1146 (42S02): Table 'evaluacion_2.tabla' doesn't exist
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select tablaa.id, tablaa.nombre from tablaa right join tablab on tablaa.nombre = tablab.nombre;
++------+--------+
+| id   | nombre |
++------+--------+
+|    1 | A      |
+|    2 | B      |
+| NULL | NULL   |
+| NULL | NULL   |
+| NULL | NULL   |
++------+--------+
+5 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select tablaa.id, tablaa.nombre from tablaa right join tablab on tablaa.nombre = tablab.nombre UNION ALL select tablaa.id, tablaa.nombre from tablaa left join tablab on tablaa.nombre = tablab.nombre;
++------+--------+
+| id   | nombre |
++------+--------+
+|    1 | A      |
+|    2 | B      |
+| NULL | NULL   |
+| NULL | NULL   |
+| NULL | NULL   |
+|    1 | A      |
+|    2 | B      |
+|    3 | C      |
+|    4 | D      |
+|    5 | E      |
++------+--------+
+10 rows in set (0.0007 sec)
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select a.orderid, b.customerid, b.companyname from orders a
+                                        ... left join customers b
+                                        ... on a.customerid = b.customerid;
+ERROR: 1146 (42S02): Table 'evaluacion_2.orders' doesn't exist
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select a.orderid, b.customerid, b.companyname from order a left join customers b on a.customerid = b.customerid;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order a left join customers b on a.customerid = b.customerid' at line 1
+
+ MySQL  localhost:3306  evaluacion_2  SQL > select a.orderid, b.customerid, b.companyname from orders a left join customers b on a.customerid = b.customerid;
+ERROR: 1146 (42S02): Table 'evaluacion_2.orders' doesn't exist
+
+ MySQL  localhost:3306  evaluacion_2  SQL > \use northwind
+Default schema set to `northwind`.
+Fetching table and column names from `northwind` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:3306  northwind  SQL > select a.orderid, b.customerid, b.companyname from orders a left join customers b on a.customerid = b.customerid;
++---------+------------+------------------------------------+
+| orderid | customerid | companyname                        |
++---------+------------+------------------------------------+
+|   10261 | NULL       | NULL                               |
+|   10262 | NULL       | NULL                               |
+|   10263 | NULL       | NULL                               |
+|   10264 | NULL       | NULL                               |
+|   10643 | ALFKI      | Alfreds Futterkiste                |
+|   10692 | ALFKI      | Alfreds Futterkiste                |
+|   10702 | ALFKI      | Alfreds Futterkiste                |
+|   10835 | ALFKI      | Alfreds Futterkiste                |
+|   10952 | ALFKI      | Alfreds Futterkiste                |
+|   11011 | ALFKI      | Alfreds Futterkiste                |
+|   10308 | ANATR      | Ana Trujillo Emparedados y helados |
+|   10625 | ANATR      | Ana Trujillo Emparedados y helados |
+|   10759 | ANATR      | Ana Trujillo Emparedados y helados |
+|   10926 | ANATR      | Ana Trujillo Emparedados y helados |
+|   10365 | ANTON      | Antonio Moreno Taquera             |
+|   10507 | ANTON      | Antonio Moreno Taquera             |
+|   10535 | ANTON      | Antonio Moreno Taquera             |
+|   10573 | ANTON      | Antonio Moreno Taquera             |
+|   10677 | ANTON      | Antonio Moreno Taquera             |
+|   10682 | ANTON      | Antonio Moreno Taquera             |
+|   10856 | ANTON      | Antonio Moreno Taquera             |
+|   10355 | AROUT      | Around the Horn                    |
+|   10383 | AROUT      | Around the Horn                    |
+|   10453 | AROUT      | Around the Horn                    |
+|   10558 | AROUT      | Around the Horn                    |
+|   10707 | AROUT      | Around the Horn                    |
+|   10741 | AROUT      | Around the Horn                    |
+|   10743 | AROUT      | Around the Horn                    |
+|   10768 | AROUT      | Around the Horn                    |
+|   10793 | AROUT      | Around the Horn                    |
+|   10864 | AROUT      | Around the Horn                    |
+|   10920 | AROUT      | Around the Horn                    |
+|   10953 | AROUT      | Around the Horn                    |
+|   11016 | AROUT      | Around the Horn                    |
+|   10278 | BERGS      | Berglunds snabbkp                  |
+|   10280 | BERGS      | Berglunds snabbkp                  |
+|   10384 | BERGS      | Berglunds snabbkp                  |
+|   10444 | BERGS      | Berglunds snabbkp                  |
+|   10445 | BERGS      | Berglunds snabbkp                  |
+|   10524 | BERGS      | Berglunds snabbkp                  |
+|   10572 | BERGS      | Berglunds snabbkp                  |
+|   10626 | BERGS      | Berglunds snabbkp                  |
+|   10654 | BERGS      | Berglunds snabbkp                  |
+|   10672 | BERGS      | Berglunds snabbkp                  |
+|   10689 | BERGS      | Berglunds snabbkp                  |
+|   10733 | BERGS      | Berglunds snabbkp                  |
+|   10778 | BERGS      | Berglunds snabbkp                  |
+|   10837 | BERGS      | Berglunds snabbkp                  |
+|   10857 | BERGS      | Berglunds snabbkp                  |
+|   10866 | BERGS      | Berglunds snabbkp                  |
+|   10875 | BERGS      | Berglunds snabbkp                  |
+|   10924 | BERGS      | Berglunds snabbkp                  |
+|   10501 | BLAUS      | Blauer See Delikatessen            |
+|   10509 | BLAUS      | Blauer See Delikatessen            |
+|   10582 | BLAUS      | Blauer See Delikatessen            |
+|   10614 | BLAUS      | Blauer See Delikatessen            |
+|   10853 | BLAUS      | Blauer See Delikatessen            |
+|   10956 | BLAUS      | Blauer See Delikatessen            |
+|   11058 | BLAUS      | Blauer See Delikatessen            |
+|   10265 | BLONP      | Blondesddsl pre et fils            |
+|   10297 | BLONP      | Blondesddsl pre et fils            |
+|   10360 | BLONP      | Blondesddsl pre et fils            |
+|   10436 | BLONP      | Blondesddsl pre et fils            |
+|   10449 | BLONP      | Blondesddsl pre et fils            |
+|   10559 | BLONP      | Blondesddsl pre et fils            |
+|   10566 | BLONP      | Blondesddsl pre et fils            |
+|   10584 | BLONP      | Blondesddsl pre et fils            |
+|   10628 | BLONP      | Blondesddsl pre et fils            |
+|   10679 | BLONP      | Blondesddsl pre et fils            |
+|   10826 | BLONP      | Blondesddsl pre et fils            |
+|   10326 | BOLID      | Blido Comidas preparadas           |
+|   10801 | BOLID      | Blido Comidas preparadas           |
+|   10970 | BOLID      | Blido Comidas preparadas           |
+|   10331 | BONAP      | Bon app'                           |
+|   10340 | BONAP      | Bon app'                           |
+|   10362 | BONAP      | Bon app'                           |
+|   10470 | BONAP      | Bon app'                           |
+|   10511 | BONAP      | Bon app'                           |
+|   10525 | BONAP      | Bon app'                           |
+|   10663 | BONAP      | Bon app'                           |
+|   10715 | BONAP      | Bon app'                           |
+|   10730 | BONAP      | Bon app'                           |
+|   10732 | BONAP      | Bon app'                           |
+|   10755 | BONAP      | Bon app'                           |
+|   10827 | BONAP      | Bon app'                           |
+|   10871 | BONAP      | Bon app'                           |
+|   10876 | BONAP      | Bon app'                           |
+|   10932 | BONAP      | Bon app'                           |
+|   10940 | BONAP      | Bon app'                           |
+|   11076 | BONAP      | Bon app'                           |
+|   10389 | BOTTM      | Bottom-Dollar Markets              |
+|   10410 | BOTTM      | Bottom-Dollar Markets              |
+|   10411 | BOTTM      | Bottom-Dollar Markets              |
+|   10431 | BOTTM      | Bottom-Dollar Markets              |
+|   10492 | BOTTM      | Bottom-Dollar Markets              |
+|   10742 | BOTTM      | Bottom-Dollar Markets              |
+|   10918 | BOTTM      | Bottom-Dollar Markets              |
+|   10944 | BOTTM      | Bottom-Dollar Markets              |
+|   10949 | BOTTM      | Bottom-Dollar Markets              |
+|   10975 | BOTTM      | Bottom-Dollar Markets              |
+|   10982 | BOTTM      | Bottom-Dollar Markets              |
+|   11027 | BOTTM      | Bottom-Dollar Markets              |
+|   11045 | BOTTM      | Bottom-Dollar Markets              |
+|   11048 | BOTTM      | Bottom-Dollar Markets              |
+|   10289 | BSBEV      | B's Beverages                      |
+|   10471 | BSBEV      | B's Beverages                      |
+|   10484 | BSBEV      | B's Beverages                      |
+|   10538 | BSBEV      | B's Beverages                      |
+|   10539 | BSBEV      | B's Beverages                      |
+|   10578 | BSBEV      | B's Beverages                      |
+|   10599 | BSBEV      | B's Beverages                      |
+|   10943 | BSBEV      | B's Beverages                      |
+|   10947 | BSBEV      | B's Beverages                      |
+|   11023 | BSBEV      | B's Beverages                      |
+|   10521 | CACTU      | Cactus Comidas para llevar         |
+|   10782 | CACTU      | Cactus Comidas para llevar         |
+|   10819 | CACTU      | Cactus Comidas para llevar         |
+|   10881 | CACTU      | Cactus Comidas para llevar         |
+|   10937 | CACTU      | Cactus Comidas para llevar         |
+|   11054 | CACTU      | Cactus Comidas para llevar         |
+|   10259 | CENTC      | Centro comercial Moctezuma         |
+|   10254 | CHOPS      | Chop-suey Chinese                  |
+|   10370 | CHOPS      | Chop-suey Chinese                  |
+|   10519 | CHOPS      | Chop-suey Chinese                  |
+|   10731 | CHOPS      | Chop-suey Chinese                  |
+|   10746 | CHOPS      | Chop-suey Chinese                  |
+|   10966 | CHOPS      | Chop-suey Chinese                  |
+|   11029 | CHOPS      | Chop-suey Chinese                  |
+|   11041 | CHOPS      | Chop-suey Chinese                  |
+|   10290 | COMMI      | Comrcio Mineiro                    |
+|   10466 | COMMI      | Comrcio Mineiro                    |
+|   10494 | COMMI      | Comrcio Mineiro                    |
+|   10969 | COMMI      | Comrcio Mineiro                    |
+|   11042 | COMMI      | Comrcio Mineiro                    |
+|   10435 | CONSH      | Consolidated Holdings              |
+|   10462 | CONSH      | Consolidated Holdings              |
+|   10848 | CONSH      | Consolidated Holdings              |
+|   10363 | DRACD      | Drachenblut Delikatessen           |
+|   10391 | DRACD      | Drachenblut Delikatessen           |
+|   10797 | DRACD      | Drachenblut Delikatessen           |
+|   10825 | DRACD      | Drachenblut Delikatessen           |
+|   11036 | DRACD      | Drachenblut Delikatessen           |
+|   11067 | DRACD      | Drachenblut Delikatessen           |
+|   10311 | DUMON      | Du monde entier                    |
+|   10609 | DUMON      | Du monde entier                    |
+|   10683 | DUMON      | Du monde entier                    |
+|   10890 | DUMON      | Du monde entier                    |
+|   10364 | EASTC      | Eastern Connection                 |
+|   10400 | EASTC      | Eastern Connection                 |
+|   10532 | EASTC      | Eastern Connection                 |
+|   10726 | EASTC      | Eastern Connection                 |
+|   10987 | EASTC      | Eastern Connection                 |
+|   11024 | EASTC      | Eastern Connection                 |
+|   11047 | EASTC      | Eastern Connection                 |
+|   11056 | EASTC      | Eastern Connection                 |
+|   10258 | ERNSH      | Ernst Handel                       |
+|   10351 | ERNSH      | Ernst Handel                       |
+|   10368 | ERNSH      | Ernst Handel                       |
+|   10382 | ERNSH      | Ernst Handel                       |
+|   10390 | ERNSH      | Ernst Handel                       |
+|   10402 | ERNSH      | Ernst Handel                       |
+|   10403 | ERNSH      | Ernst Handel                       |
+|   10430 | ERNSH      | Ernst Handel                       |
+|   10442 | ERNSH      | Ernst Handel                       |
+|   10514 | ERNSH      | Ernst Handel                       |
+|   10571 | ERNSH      | Ernst Handel                       |
+|   10595 | ERNSH      | Ernst Handel                       |
+|   10633 | ERNSH      | Ernst Handel                       |
+|   10667 | ERNSH      | Ernst Handel                       |
+|   10698 | ERNSH      | Ernst Handel                       |
+|   10764 | ERNSH      | Ernst Handel                       |
+|   10771 | ERNSH      | Ernst Handel                       |
+|   10773 | ERNSH      | Ernst Handel                       |
+|   10776 | ERNSH      | Ernst Handel                       |
+|   10795 | ERNSH      | Ernst Handel                       |
+|   10836 | ERNSH      | Ernst Handel                       |
+|   10854 | ERNSH      | Ernst Handel                       |
+|   10895 | ERNSH      | Ernst Handel                       |
+|   10968 | ERNSH      | Ernst Handel                       |
+|   10979 | ERNSH      | Ernst Handel                       |
+|   10990 | ERNSH      | Ernst Handel                       |
+|   11008 | ERNSH      | Ernst Handel                       |
+|   11017 | ERNSH      | Ernst Handel                       |
+|   11072 | ERNSH      | Ernst Handel                       |
+|   10347 | FAMIA      | Familia Arquibaldo                 |
+|   10386 | FAMIA      | Familia Arquibaldo                 |
+|   10414 | FAMIA      | Familia Arquibaldo                 |
+|   10512 | FAMIA      | Familia Arquibaldo                 |
+|   10581 | FAMIA      | Familia Arquibaldo                 |
+|   10650 | FAMIA      | Familia Arquibaldo                 |
+|   10725 | FAMIA      | Familia Arquibaldo                 |
+|   10408 | FOLIG      | Folies gourmandes                  |
+|   10480 | FOLIG      | Folies gourmandes                  |
+|   10634 | FOLIG      | Folies gourmandes                  |
+|   10763 | FOLIG      | Folies gourmandes                  |
+|   10789 | FOLIG      | Folies gourmandes                  |
+|   10327 | FOLKO      | Folk och f HB                      |
+|   10378 | FOLKO      | Folk och f HB                      |
+|   10434 | FOLKO      | Folk och f HB                      |
+|   10460 | FOLKO      | Folk och f HB                      |
+|   10533 | FOLKO      | Folk och f HB                      |
+|   10561 | FOLKO      | Folk och f HB                      |
+|   10703 | FOLKO      | Folk och f HB                      |
+|   10762 | FOLKO      | Folk och f HB                      |
+|   10774 | FOLKO      | Folk och f HB                      |
+|   10824 | FOLKO      | Folk och f HB                      |
+|   10880 | FOLKO      | Folk och f HB                      |
+|   10902 | FOLKO      | Folk och f HB                      |
+|   10955 | FOLKO      | Folk och f HB                      |
+|   10977 | FOLKO      | Folk och f HB                      |
+|   10980 | FOLKO      | Folk och f HB                      |
+|   10993 | FOLKO      | Folk och f HB                      |
+|   11001 | FOLKO      | Folk och f HB                      |
+|   11050 | FOLKO      | Folk och f HB                      |
+|   10267 | FRANK      | Frankenversand                     |
+|   10337 | FRANK      | Frankenversand                     |
+|   10342 | FRANK      | Frankenversand                     |
+|   10396 | FRANK      | Frankenversand                     |
+|   10488 | FRANK      | Frankenversand                     |
+|   10560 | FRANK      | Frankenversand                     |
+|   10623 | FRANK      | Frankenversand                     |
+|   10653 | FRANK      | Frankenversand                     |
+|   10670 | FRANK      | Frankenversand                     |
+|   10675 | FRANK      | Frankenversand                     |
+|   10717 | FRANK      | Frankenversand                     |
+|   10791 | FRANK      | Frankenversand                     |
+|   10859 | FRANK      | Frankenversand                     |
+|   10929 | FRANK      | Frankenversand                     |
+|   11012 | FRANK      | Frankenversand                     |
+|   10671 | FRANR      | France restauration                |
+|   10860 | FRANR      | France restauration                |
+|   10971 | FRANR      | France restauration                |
+|   10422 | FRANS      | Franchi S.p.A.                     |
+|   10710 | FRANS      | Franchi S.p.A.                     |
+|   10753 | FRANS      | Franchi S.p.A.                     |
+|   10807 | FRANS      | Franchi S.p.A.                     |
+|   11026 | FRANS      | Franchi S.p.A.                     |
+|   11060 | FRANS      | Franchi S.p.A.                     |
+|   10328 | FURIB      | Furia Bacalhau e Frutos do Mar     |
+|   10352 | FURIB      | Furia Bacalhau e Frutos do Mar     |
+|   10464 | FURIB      | Furia Bacalhau e Frutos do Mar     |
+|   10491 | FURIB      | Furia Bacalhau e Frutos do Mar     |
+|   10551 | FURIB      | Furia Bacalhau e Frutos do Mar     |
+|   10604 | FURIB      | Furia Bacalhau e Frutos do Mar     |
+|   10664 | FURIB      | Furia Bacalhau e Frutos do Mar     |
+|   10963 | FURIB      | Furia Bacalhau e Frutos do Mar     |
+|   10366 | GALED      | Galera del gastrnomo               |
+|   10426 | GALED      | Galera del gastrnomo               |
+|   10568 | GALED      | Galera del gastrnomo               |
+|   10887 | GALED      | Galera del gastrnomo               |
+|   10928 | GALED      | Galera del gastrnomo               |
+|   10303 | GODOS      | Godos Cocina Tpica                 |
+|   10550 | GODOS      | Godos Cocina Tpica                 |
+|   10629 | GODOS      | Godos Cocina Tpica                 |
+|   10872 | GODOS      | Godos Cocina Tpica                 |
+|   10874 | GODOS      | Godos Cocina Tpica                 |
+|   10888 | GODOS      | Godos Cocina Tpica                 |
+|   10911 | GODOS      | Godos Cocina Tpica                 |
+|   10948 | GODOS      | Godos Cocina Tpica                 |
+|   11009 | GODOS      | Godos Cocina Tpica                 |
+|   11037 | GODOS      | Godos Cocina Tpica                 |
+|   10423 | GOURL      | Gourmet Lanchonetes                |
+|   10652 | GOURL      | Gourmet Lanchonetes                |
+|   10685 | GOURL      | Gourmet Lanchonetes                |
+|   10709 | GOURL      | Gourmet Lanchonetes                |
+|   10734 | GOURL      | Gourmet Lanchonetes                |
+|   10777 | GOURL      | Gourmet Lanchonetes                |
+|   10790 | GOURL      | Gourmet Lanchonetes                |
+|   10959 | GOURL      | Gourmet Lanchonetes                |
+|   11049 | GOURL      | Gourmet Lanchonetes                |
+|   10528 | GREAL      | Great Lakes Food Market            |
+|   10589 | GREAL      | Great Lakes Food Market            |
+|   10616 | GREAL      | Great Lakes Food Market            |
+|   10617 | GREAL      | Great Lakes Food Market            |
+|   10656 | GREAL      | Great Lakes Food Market            |
+|   10681 | GREAL      | Great Lakes Food Market            |
+|   10816 | GREAL      | Great Lakes Food Market            |
+|   10936 | GREAL      | Great Lakes Food Market            |
+|   11006 | GREAL      | Great Lakes Food Market            |
+|   11040 | GREAL      | Great Lakes Food Market            |
+|   11061 | GREAL      | Great Lakes Food Market            |
+|   10268 | GROSR      | GROSELLA-Restaurante               |
+|   10785 | GROSR      | GROSELLA-Restaurante               |
+|   10250 | HANAR      | Hanari Carnes                      |
+|   10253 | HANAR      | Hanari Carnes                      |
+|   10541 | HANAR      | Hanari Carnes                      |
+|   10645 | HANAR      | Hanari Carnes                      |
+|   10690 | HANAR      | Hanari Carnes                      |
+|   10770 | HANAR      | Hanari Carnes                      |
+|   10783 | HANAR      | Hanari Carnes                      |
+|   10886 | HANAR      | Hanari Carnes                      |
+|   10903 | HANAR      | Hanari Carnes                      |
+|   10922 | HANAR      | Hanari Carnes                      |
+|   10925 | HANAR      | Hanari Carnes                      |
+|   10981 | HANAR      | Hanari Carnes                      |
+|   11022 | HANAR      | Hanari Carnes                      |
+|   11052 | HANAR      | Hanari Carnes                      |
+|   10257 | HILAA      | HILARION-Abastos                   |
+|   10395 | HILAA      | HILARION-Abastos                   |
+|   10476 | HILAA      | HILARION-Abastos                   |
+|   10486 | HILAA      | HILARION-Abastos                   |
+|   10490 | HILAA      | HILARION-Abastos                   |
+|   10498 | HILAA      | HILARION-Abastos                   |
+|   10552 | HILAA      | HILARION-Abastos                   |
+|   10601 | HILAA      | HILARION-Abastos                   |
+|   10613 | HILAA      | HILARION-Abastos                   |
+|   10641 | HILAA      | HILARION-Abastos                   |
+|   10705 | HILAA      | HILARION-Abastos                   |
+|   10796 | HILAA      | HILARION-Abastos                   |
+|   10863 | HILAA      | HILARION-Abastos                   |
+|   10901 | HILAA      | HILARION-Abastos                   |
+|   10957 | HILAA      | HILARION-Abastos                   |
+|   10960 | HILAA      | HILARION-Abastos                   |
+|   10976 | HILAA      | HILARION-Abastos                   |
+|   11055 | HILAA      | HILARION-Abastos                   |
+|   10375 | HUNGC      | Hungry Coyote Import Store         |
+|   10394 | HUNGC      | Hungry Coyote Import Store         |
+|   10415 | HUNGC      | Hungry Coyote Import Store         |
+|   10600 | HUNGC      | Hungry Coyote Import Store         |
+|   10660 | HUNGC      | Hungry Coyote Import Store         |
+|   10298 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10309 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10335 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10373 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10380 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10429 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10503 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10516 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10567 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10646 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10661 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10687 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10701 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10712 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10736 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10897 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10912 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10985 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   11063 | HUNGO      | Hungry Owl All-Night Grocers       |
+|   10315 | ISLAT      | Island Trading                     |
+|   10318 | ISLAT      | Island Trading                     |
+|   10321 | ISLAT      | Island Trading                     |
+|   10473 | ISLAT      | Island Trading                     |
+|   10621 | ISLAT      | Island Trading                     |
+|   10674 | ISLAT      | Island Trading                     |
+|   10749 | ISLAT      | Island Trading                     |
+|   10798 | ISLAT      | Island Trading                     |
+|   10829 | ISLAT      | Island Trading                     |
+|   10933 | ISLAT      | Island Trading                     |
+|   10323 | KOENE      | Kniglich Essen                     |
+|   10325 | KOENE      | Kniglich Essen                     |
+|   10456 | KOENE      | Kniglich Essen                     |
+|   10457 | KOENE      | Kniglich Essen                     |
+|   10468 | KOENE      | Kniglich Essen                     |
+|   10506 | KOENE      | Kniglich Essen                     |
+|   10542 | KOENE      | Kniglich Essen                     |
+|   10630 | KOENE      | Kniglich Essen                     |
+|   10718 | KOENE      | Kniglich Essen                     |
+|   10799 | KOENE      | Kniglich Essen                     |
+|   10817 | KOENE      | Kniglich Essen                     |
+|   10849 | KOENE      | Kniglich Essen                     |
+|   10893 | KOENE      | Kniglich Essen                     |
+|   11028 | KOENE      | Kniglich Essen                     |
+|   10858 | LACOR      | La corne d'abondance               |
+|   10927 | LACOR      | La corne d'abondance               |
+|   10972 | LACOR      | La corne d'abondance               |
+|   10973 | LACOR      | La corne d'abondance               |
+|   10350 | LAMAI      | La maison d'Asie                   |
+|   10358 | LAMAI      | La maison d'Asie                   |
+|   10371 | LAMAI      | La maison d'Asie                   |
+|   10413 | LAMAI      | La maison d'Asie                   |
+|   10425 | LAMAI      | La maison d'Asie                   |
+|   10454 | LAMAI      | La maison d'Asie                   |
+|   10493 | LAMAI      | La maison d'Asie                   |
+|   10500 | LAMAI      | La maison d'Asie                   |
+|   10610 | LAMAI      | La maison d'Asie                   |
+|   10631 | LAMAI      | La maison d'Asie                   |
+|   10787 | LAMAI      | La maison d'Asie                   |
+|   10832 | LAMAI      | La maison d'Asie                   |
+|   10923 | LAMAI      | La maison d'Asie                   |
+|   11051 | LAMAI      | La maison d'Asie                   |
+|   10495 | LAUGB      | Laughing Bacchus Wine Cellars      |
+|   10620 | LAUGB      | Laughing Bacchus Wine Cellars      |
+|   10810 | LAUGB      | Laughing Bacchus Wine Cellars      |
+|   10482 | LAZYK      | Lazy K Kountry Store               |
+|   10545 | LAZYK      | Lazy K Kountry Store               |
+|   10279 | LEHMS      | Lehmanns Marktstand                |
+|   10284 | LEHMS      | Lehmanns Marktstand                |
+|   10343 | LEHMS      | Lehmanns Marktstand                |
+|   10497 | LEHMS      | Lehmanns Marktstand                |
+|   10522 | LEHMS      | Lehmanns Marktstand                |
+|   10534 | LEHMS      | Lehmanns Marktstand                |
+|   10536 | LEHMS      | Lehmanns Marktstand                |
+|   10557 | LEHMS      | Lehmanns Marktstand                |
+|   10592 | LEHMS      | Lehmanns Marktstand                |
+|   10593 | LEHMS      | Lehmanns Marktstand                |
+|   10772 | LEHMS      | Lehmanns Marktstand                |
+|   10862 | LEHMS      | Lehmanns Marktstand                |
+|   10891 | LEHMS      | Lehmanns Marktstand                |
+|   10934 | LEHMS      | Lehmanns Marktstand                |
+|   11070 | LEHMS      | Lehmanns Marktstand                |
+|   10579 | LETSS      | Let's Stop N Shop                  |
+|   10719 | LETSS      | Let's Stop N Shop                  |
+|   10735 | LETSS      | Let's Stop N Shop                  |
+|   10884 | LETSS      | Let's Stop N Shop                  |
+|   10283 | LILAS      | LILA-Supermercado                  |
+|   10296 | LILAS      | LILA-Supermercado                  |
+|   10330 | LILAS      | LILA-Supermercado                  |
+|   10357 | LILAS      | LILA-Supermercado                  |
+|   10381 | LILAS      | LILA-Supermercado                  |
+|   10461 | LILAS      | LILA-Supermercado                  |
+|   10499 | LILAS      | LILA-Supermercado                  |
+|   10543 | LILAS      | LILA-Supermercado                  |
+|   10780 | LILAS      | LILA-Supermercado                  |
+|   10823 | LILAS      | LILA-Supermercado                  |
+|   10899 | LILAS      | LILA-Supermercado                  |
+|   10997 | LILAS      | LILA-Supermercado                  |
+|   11065 | LILAS      | LILA-Supermercado                  |
+|   11071 | LILAS      | LILA-Supermercado                  |
+|   10405 | LINOD      | LINO-Delicateses                   |
+|   10485 | LINOD      | LINO-Delicateses                   |
+|   10638 | LINOD      | LINO-Delicateses                   |
+|   10697 | LINOD      | LINO-Delicateses                   |
+|   10729 | LINOD      | LINO-Delicateses                   |
+|   10811 | LINOD      | LINO-Delicateses                   |
+|   10838 | LINOD      | LINO-Delicateses                   |
+|   10840 | LINOD      | LINO-Delicateses                   |
+|   10919 | LINOD      | LINO-Delicateses                   |
+|   10954 | LINOD      | LINO-Delicateses                   |
+|   11014 | LINOD      | LINO-Delicateses                   |
+|   11039 | LINOD      | LINO-Delicateses                   |
+|   10307 | LONEP      | Lonesome Pine Restaurant           |
+|   10317 | LONEP      | Lonesome Pine Restaurant           |
+|   10544 | LONEP      | Lonesome Pine Restaurant           |
+|   10662 | LONEP      | Lonesome Pine Restaurant           |
+|   10665 | LONEP      | Lonesome Pine Restaurant           |
+|   10867 | LONEP      | Lonesome Pine Restaurant           |
+|   10883 | LONEP      | Lonesome Pine Restaurant           |
+|   11018 | LONEP      | Lonesome Pine Restaurant           |
+|   10275 | MAGAA      | Magazzini Alimentari Riuniti       |
+|   10300 | MAGAA      | Magazzini Alimentari Riuniti       |
+|   10404 | MAGAA      | Magazzini Alimentari Riuniti       |
+|   10467 | MAGAA      | Magazzini Alimentari Riuniti       |
+|   10635 | MAGAA      | Magazzini Alimentari Riuniti       |
+|   10754 | MAGAA      | Magazzini Alimentari Riuniti       |
+|   10784 | MAGAA      | Magazzini Alimentari Riuniti       |
+|   10818 | MAGAA      | Magazzini Alimentari Riuniti       |
+|   10939 | MAGAA      | Magazzini Alimentari Riuniti       |
+|   10950 | MAGAA      | Magazzini Alimentari Riuniti       |
+|   10529 | MAISD      | Maison Dewey                       |
+|   10649 | MAISD      | Maison Dewey                       |
+|   10760 | MAISD      | Maison Dewey                       |
+|   10892 | MAISD      | Maison Dewey                       |
+|   10896 | MAISD      | Maison Dewey                       |
+|   10978 | MAISD      | Maison Dewey                       |
+|   11004 | MAISD      | Maison Dewey                       |
+|   10332 | MEREP      | Mre Paillarde                      |
+|   10339 | MEREP      | Mre Paillarde                      |
+|   10376 | MEREP      | Mre Paillarde                      |
+|   10424 | MEREP      | Mre Paillarde                      |
+|   10439 | MEREP      | Mre Paillarde                      |
+|   10505 | MEREP      | Mre Paillarde                      |
+|   10565 | MEREP      | Mre Paillarde                      |
+|   10570 | MEREP      | Mre Paillarde                      |
+|   10590 | MEREP      | Mre Paillarde                      |
+|   10605 | MEREP      | Mre Paillarde                      |
+|   10618 | MEREP      | Mre Paillarde                      |
+|   10619 | MEREP      | Mre Paillarde                      |
+|   10724 | MEREP      | Mre Paillarde                      |
+|   10277 | MORGK      | Morgenstern Gesundkost             |
+|   10575 | MORGK      | Morgenstern Gesundkost             |
+|   10699 | MORGK      | Morgenstern Gesundkost             |
+|   10779 | MORGK      | Morgenstern Gesundkost             |
+|   10945 | MORGK      | Morgenstern Gesundkost             |
+|   10517 | NORTS      | North/South                        |
+|   10752 | NORTS      | North/South                        |
+|   11057 | NORTS      | North/South                        |
+|   10409 | OCEAN      | Ocano Atlntico Ltda.               |
+|   10531 | OCEAN      | Ocano Atlntico Ltda.               |
+|   10898 | OCEAN      | Ocano Atlntico Ltda.               |
+|   10958 | OCEAN      | Ocano Atlntico Ltda.               |
+|   10986 | OCEAN      | Ocano Atlntico Ltda.               |
+|   10305 | OLDWO      | Old World Delicatessen             |
+|   10338 | OLDWO      | Old World Delicatessen             |
+|   10441 | OLDWO      | Old World Delicatessen             |
+|   10594 | OLDWO      | Old World Delicatessen             |
+|   10680 | OLDWO      | Old World Delicatessen             |
+|   10706 | OLDWO      | Old World Delicatessen             |
+|   10808 | OLDWO      | Old World Delicatessen             |
+|   10855 | OLDWO      | Old World Delicatessen             |
+|   10965 | OLDWO      | Old World Delicatessen             |
+|   11034 | OLDWO      | Old World Delicatessen             |
+|   10260 | OTTIK      | Ottilies Kseladen                  |
+|   10407 | OTTIK      | Ottilies Kseladen                  |
+|   10508 | OTTIK      | Ottilies Kseladen                  |
+|   10554 | OTTIK      | Ottilies Kseladen                  |
+|   10580 | OTTIK      | Ottilies Kseladen                  |
+|   10684 | OTTIK      | Ottilies Kseladen                  |
+|   10766 | OTTIK      | Ottilies Kseladen                  |
+|   10833 | OTTIK      | Ottilies Kseladen                  |
+|   10999 | OTTIK      | Ottilies Kseladen                  |
+|   11020 | OTTIK      | Ottilies Kseladen                  |
+|   10322 | PERIC      | Pericles Comidas clsicas           |
+|   10354 | PERIC      | Pericles Comidas clsicas           |
+|   10474 | PERIC      | Pericles Comidas clsicas           |
+|   10502 | PERIC      | Pericles Comidas clsicas           |
+|   10995 | PERIC      | Pericles Comidas clsicas           |
+|   11073 | PERIC      | Pericles Comidas clsicas           |
+|   10353 | PICCO      | Piccolo und mehr                   |
+|   10392 | PICCO      | Piccolo und mehr                   |
+|   10427 | PICCO      | Piccolo und mehr                   |
+|   10489 | PICCO      | Piccolo und mehr                   |
+|   10530 | PICCO      | Piccolo und mehr                   |
+|   10597 | PICCO      | Piccolo und mehr                   |
+|   10686 | PICCO      | Piccolo und mehr                   |
+|   10747 | PICCO      | Piccolo und mehr                   |
+|   10844 | PICCO      | Piccolo und mehr                   |
+|   11053 | PICCO      | Piccolo und mehr                   |
+|   10336 | PRINI      | Princesa Isabel Vinhos             |
+|   10397 | PRINI      | Princesa Isabel Vinhos             |
+|   10433 | PRINI      | Princesa Isabel Vinhos             |
+|   10477 | PRINI      | Princesa Isabel Vinhos             |
+|   11007 | PRINI      | Princesa Isabel Vinhos             |
+|   10291 | QUEDE      | Que Delcia                         |
+|   10379 | QUEDE      | Que Delcia                         |
+|   10421 | QUEDE      | Que Delcia                         |
+|   10587 | QUEDE      | Que Delcia                         |
+|   10647 | QUEDE      | Que Delcia                         |
+|   10720 | QUEDE      | Que Delcia                         |
+|   10794 | QUEDE      | Que Delcia                         |
+|   10989 | QUEDE      | Que Delcia                         |
+|   10372 | QUEEN      | Queen Cozinha                      |
+|   10406 | QUEEN      | Queen Cozinha                      |
+|   10487 | QUEEN      | Queen Cozinha                      |
+|   10637 | QUEEN      | Queen Cozinha                      |
+|   10659 | QUEEN      | Queen Cozinha                      |
+|   10704 | QUEEN      | Queen Cozinha                      |
+|   10728 | QUEEN      | Queen Cozinha                      |
+|   10786 | QUEEN      | Queen Cozinha                      |
+|   10868 | QUEEN      | Queen Cozinha                      |
+|   10913 | QUEEN      | Queen Cozinha                      |
+|   10914 | QUEEN      | Queen Cozinha                      |
+|   10961 | QUEEN      | Queen Cozinha                      |
+|   11068 | QUEEN      | Queen Cozinha                      |
+|   10273 | QUICK      | QUICK-Stop                         |
+|   10285 | QUICK      | QUICK-Stop                         |
+|   10286 | QUICK      | QUICK-Stop                         |
+|   10313 | QUICK      | QUICK-Stop                         |
+|   10345 | QUICK      | QUICK-Stop                         |
+|   10361 | QUICK      | QUICK-Stop                         |
+|   10418 | QUICK      | QUICK-Stop                         |
+|   10451 | QUICK      | QUICK-Stop                         |
+|   10515 | QUICK      | QUICK-Stop                         |
+|   10527 | QUICK      | QUICK-Stop                         |
+|   10540 | QUICK      | QUICK-Stop                         |
+|   10549 | QUICK      | QUICK-Stop                         |
+|   10588 | QUICK      | QUICK-Stop                         |
+|   10658 | QUICK      | QUICK-Stop                         |
+|   10691 | QUICK      | QUICK-Stop                         |
+|   10694 | QUICK      | QUICK-Stop                         |
+|   10721 | QUICK      | QUICK-Stop                         |
+|   10745 | QUICK      | QUICK-Stop                         |
+|   10765 | QUICK      | QUICK-Stop                         |
+|   10788 | QUICK      | QUICK-Stop                         |
+|   10845 | QUICK      | QUICK-Stop                         |
+|   10865 | QUICK      | QUICK-Stop                         |
+|   10878 | QUICK      | QUICK-Stop                         |
+|   10938 | QUICK      | QUICK-Stop                         |
+|   10962 | QUICK      | QUICK-Stop                         |
+|   10991 | QUICK      | QUICK-Stop                         |
+|   10996 | QUICK      | QUICK-Stop                         |
+|   11021 | QUICK      | QUICK-Stop                         |
+|   10448 | RANCH      | Rancho grande                      |
+|   10716 | RANCH      | Rancho grande                      |
+|   10828 | RANCH      | Rancho grande                      |
+|   10916 | RANCH      | Rancho grande                      |
+|   11019 | RANCH      | Rancho grande                      |
+|   10272 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10294 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10314 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10316 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10346 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10401 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10479 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10564 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10569 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10598 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10761 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10820 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10852 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10889 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10988 | RATTC      | Rattlesnake Canyon Grocery         |
+|   11000 | RATTC      | Rattlesnake Canyon Grocery         |
+|   11077 | RATTC      | Rattlesnake Canyon Grocery         |
+|   10288 | REGGC      | Reggiani Caseifici                 |
+|   10428 | REGGC      | Reggiani Caseifici                 |
+|   10443 | REGGC      | Reggiani Caseifici                 |
+|   10562 | REGGC      | Reggiani Caseifici                 |
+|   10586 | REGGC      | Reggiani Caseifici                 |
+|   10655 | REGGC      | Reggiani Caseifici                 |
+|   10727 | REGGC      | Reggiani Caseifici                 |
+|   10812 | REGGC      | Reggiani Caseifici                 |
+|   10908 | REGGC      | Reggiani Caseifici                 |
+|   10942 | REGGC      | Reggiani Caseifici                 |
+|   11010 | REGGC      | Reggiani Caseifici                 |
+|   11062 | REGGC      | Reggiani Caseifici                 |
+|   10287 | RICAR      | Ricardo Adocicados                 |
+|   10299 | RICAR      | Ricardo Adocicados                 |
+|   10447 | RICAR      | Ricardo Adocicados                 |
+|   10481 | RICAR      | Ricardo Adocicados                 |
+|   10563 | RICAR      | Ricardo Adocicados                 |
+|   10622 | RICAR      | Ricardo Adocicados                 |
+|   10648 | RICAR      | Ricardo Adocicados                 |
+|   10813 | RICAR      | Ricardo Adocicados                 |
+|   10851 | RICAR      | Ricardo Adocicados                 |
+|   10877 | RICAR      | Ricardo Adocicados                 |
+|   11059 | RICAR      | Ricardo Adocicados                 |
+|   10255 | RICSU      | Richter Supermarkt                 |
+|   10419 | RICSU      | Richter Supermarkt                 |
+|   10537 | RICSU      | Richter Supermarkt                 |
+|   10666 | RICSU      | Richter Supermarkt                 |
+|   10751 | RICSU      | Richter Supermarkt                 |
+|   10758 | RICSU      | Richter Supermarkt                 |
+|   10931 | RICSU      | Richter Supermarkt                 |
+|   10951 | RICSU      | Richter Supermarkt                 |
+|   11033 | RICSU      | Richter Supermarkt                 |
+|   11075 | RICSU      | Richter Supermarkt                 |
+|   10281 | ROMEY      | Romero y tomillo                   |
+|   10282 | ROMEY      | Romero y tomillo                   |
+|   10306 | ROMEY      | Romero y tomillo                   |
+|   10917 | ROMEY      | Romero y tomillo                   |
+|   11013 | ROMEY      | Romero y tomillo                   |
+|   10387 | SANTG      | Sant Gourmet                       |
+|   10520 | SANTG      | Sant Gourmet                       |
+|   10639 | SANTG      | Sant Gourmet                       |
+|   10831 | SANTG      | Sant Gourmet                       |
+|   10909 | SANTG      | Sant Gourmet                       |
+|   11015 | SANTG      | Sant Gourmet                       |
+|   10324 | SAVEA      | Save-a-lot Markets                 |
+|   10393 | SAVEA      | Save-a-lot Markets                 |
+|   10398 | SAVEA      | Save-a-lot Markets                 |
+|   10440 | SAVEA      | Save-a-lot Markets                 |
+|   10452 | SAVEA      | Save-a-lot Markets                 |
+|   10510 | SAVEA      | Save-a-lot Markets                 |
+|   10555 | SAVEA      | Save-a-lot Markets                 |
+|   10603 | SAVEA      | Save-a-lot Markets                 |
+|   10607 | SAVEA      | Save-a-lot Markets                 |
+|   10612 | SAVEA      | Save-a-lot Markets                 |
+|   10627 | SAVEA      | Save-a-lot Markets                 |
+|   10657 | SAVEA      | Save-a-lot Markets                 |
+|   10678 | SAVEA      | Save-a-lot Markets                 |
+|   10700 | SAVEA      | Save-a-lot Markets                 |
+|   10711 | SAVEA      | Save-a-lot Markets                 |
+|   10713 | SAVEA      | Save-a-lot Markets                 |
+|   10714 | SAVEA      | Save-a-lot Markets                 |
+|   10722 | SAVEA      | Save-a-lot Markets                 |
+|   10748 | SAVEA      | Save-a-lot Markets                 |
+|   10757 | SAVEA      | Save-a-lot Markets                 |
+|   10815 | SAVEA      | Save-a-lot Markets                 |
+|   10847 | SAVEA      | Save-a-lot Markets                 |
+|   10882 | SAVEA      | Save-a-lot Markets                 |
+|   10894 | SAVEA      | Save-a-lot Markets                 |
+|   10941 | SAVEA      | Save-a-lot Markets                 |
+|   10983 | SAVEA      | Save-a-lot Markets                 |
+|   10984 | SAVEA      | Save-a-lot Markets                 |
+|   11002 | SAVEA      | Save-a-lot Markets                 |
+|   11030 | SAVEA      | Save-a-lot Markets                 |
+|   11031 | SAVEA      | Save-a-lot Markets                 |
+|   11064 | SAVEA      | Save-a-lot Markets                 |
+|   10359 | SEVES      | Seven Seas Imports                 |
+|   10377 | SEVES      | Seven Seas Imports                 |
+|   10388 | SEVES      | Seven Seas Imports                 |
+|   10472 | SEVES      | Seven Seas Imports                 |
+|   10523 | SEVES      | Seven Seas Imports                 |
+|   10547 | SEVES      | Seven Seas Imports                 |
+|   10800 | SEVES      | Seven Seas Imports                 |
+|   10804 | SEVES      | Seven Seas Imports                 |
+|   10869 | SEVES      | Seven Seas Imports                 |
+|   10341 | SIMOB      | Simons bistro                      |
+|   10417 | SIMOB      | Simons bistro                      |
+|   10556 | SIMOB      | Simons bistro                      |
+|   10642 | SIMOB      | Simons bistro                      |
+|   10669 | SIMOB      | Simons bistro                      |
+|   10802 | SIMOB      | Simons bistro                      |
+|   11074 | SIMOB      | Simons bistro                      |
+|   10738 | SPECD      | Spcialits du monde                 |
+|   10907 | SPECD      | Spcialits du monde                 |
+|   10964 | SPECD      | Spcialits du monde                 |
+|   11043 | SPECD      | Spcialits du monde                 |
+|   10271 | SPLIR      | Split Rail Beer & Ale              |
+|   10329 | SPLIR      | Split Rail Beer & Ale              |
+|   10349 | SPLIR      | Split Rail Beer & Ale              |
+|   10369 | SPLIR      | Split Rail Beer & Ale              |
+|   10385 | SPLIR      | Split Rail Beer & Ale              |
+|   10432 | SPLIR      | Split Rail Beer & Ale              |
+|   10756 | SPLIR      | Split Rail Beer & Ale              |
+|   10821 | SPLIR      | Split Rail Beer & Ale              |
+|   10974 | SPLIR      | Split Rail Beer & Ale              |
+|   10252 | SUPRD      | Suprmes dlices                     |
+|   10302 | SUPRD      | Suprmes dlices                     |
+|   10458 | SUPRD      | Suprmes dlices                     |
+|   10463 | SUPRD      | Suprmes dlices                     |
+|   10475 | SUPRD      | Suprmes dlices                     |
+|   10767 | SUPRD      | Suprmes dlices                     |
+|   10841 | SUPRD      | Suprmes dlices                     |
+|   10846 | SUPRD      | Suprmes dlices                     |
+|   10885 | SUPRD      | Suprmes dlices                     |
+|   10930 | SUPRD      | Suprmes dlices                     |
+|   11035 | SUPRD      | Suprmes dlices                     |
+|   11038 | SUPRD      | Suprmes dlices                     |
+|   10310 | THEBI      | The Big Cheese                     |
+|   10708 | THEBI      | The Big Cheese                     |
+|   10805 | THEBI      | The Big Cheese                     |
+|   10992 | THEBI      | The Big Cheese                     |
+|   10624 | THECR      | The Cracker Box                    |
+|   10775 | THECR      | The Cracker Box                    |
+|   11003 | THECR      | The Cracker Box                    |
+|   10249 | TOMSP      | Toms Spezialitten                  |
+|   10438 | TOMSP      | Toms Spezialitten                  |
+|   10446 | TOMSP      | Toms Spezialitten                  |
+|   10548 | TOMSP      | Toms Spezialitten                  |
+|   10608 | TOMSP      | Toms Spezialitten                  |
+|   10967 | TOMSP      | Toms Spezialitten                  |
+|   10276 | TORTU      | Tortuga Restaurante                |
+|   10293 | TORTU      | Tortuga Restaurante                |
+|   10304 | TORTU      | Tortuga Restaurante                |
+|   10319 | TORTU      | Tortuga Restaurante                |
+|   10518 | TORTU      | Tortuga Restaurante                |
+|   10576 | TORTU      | Tortuga Restaurante                |
+|   10676 | TORTU      | Tortuga Restaurante                |
+|   10842 | TORTU      | Tortuga Restaurante                |
+|   10915 | TORTU      | Tortuga Restaurante                |
+|   11069 | TORTU      | Tortuga Restaurante                |
+|   10292 | TRADH      | Tradio Hipermercados               |
+|   10496 | TRADH      | Tradio Hipermercados               |
+|   10606 | TRADH      | Tradio Hipermercados               |
+|   10830 | TRADH      | Tradio Hipermercados               |
+|   10834 | TRADH      | Tradio Hipermercados               |
+|   10839 | TRADH      | Tradio Hipermercados               |
+|   10574 | TRAIH      | Trail's Head Gourmet Provisioners  |
+|   10577 | TRAIH      | Trail's Head Gourmet Provisioners  |
+|   10822 | TRAIH      | Trail's Head Gourmet Provisioners  |
+|   10367 | VAFFE      | Vaffeljernet                       |
+|   10399 | VAFFE      | Vaffeljernet                       |
+|   10465 | VAFFE      | Vaffeljernet                       |
+|   10591 | VAFFE      | Vaffeljernet                       |
+|   10602 | VAFFE      | Vaffeljernet                       |
+|   10688 | VAFFE      | Vaffeljernet                       |
+|   10744 | VAFFE      | Vaffeljernet                       |
+|   10769 | VAFFE      | Vaffeljernet                       |
+|   10921 | VAFFE      | Vaffeljernet                       |
+|   10946 | VAFFE      | Vaffeljernet                       |
+|   10994 | VAFFE      | Vaffeljernet                       |
+|   10251 | VICTE      | Victuailles en stock               |
+|   10334 | VICTE      | Victuailles en stock               |
+|   10450 | VICTE      | Victuailles en stock               |
+|   10459 | VICTE      | Victuailles en stock               |
+|   10478 | VICTE      | Victuailles en stock               |
+|   10546 | VICTE      | Victuailles en stock               |
+|   10806 | VICTE      | Victuailles en stock               |
+|   10814 | VICTE      | Victuailles en stock               |
+|   10843 | VICTE      | Victuailles en stock               |
+|   10850 | VICTE      | Victuailles en stock               |
+|   10248 | VINET      | Vins et alcools Chevalier          |
+|   10274 | VINET      | Vins et alcools Chevalier          |
+|   10295 | VINET      | Vins et alcools Chevalier          |
+|   10737 | VINET      | Vins et alcools Chevalier          |
+|   10739 | VINET      | Vins et alcools Chevalier          |
+|   10301 | WANDK      | Die Wandernde Kuh                  |
+|   10312 | WANDK      | Die Wandernde Kuh                  |
+|   10348 | WANDK      | Die Wandernde Kuh                  |
+|   10356 | WANDK      | Die Wandernde Kuh                  |
+|   10513 | WANDK      | Die Wandernde Kuh                  |
+|   10632 | WANDK      | Die Wandernde Kuh                  |
+|   10640 | WANDK      | Die Wandernde Kuh                  |
+|   10651 | WANDK      | Die Wandernde Kuh                  |
+|   10668 | WANDK      | Die Wandernde Kuh                  |
+|   11046 | WANDK      | Die Wandernde Kuh                  |
+|   10266 | WARTH      | Wartian Herkku                     |
+|   10270 | WARTH      | Wartian Herkku                     |
+|   10320 | WARTH      | Wartian Herkku                     |
+|   10333 | WARTH      | Wartian Herkku                     |
+|   10412 | WARTH      | Wartian Herkku                     |
+|   10416 | WARTH      | Wartian Herkku                     |
+|   10437 | WARTH      | Wartian Herkku                     |
+|   10455 | WARTH      | Wartian Herkku                     |
+|   10526 | WARTH      | Wartian Herkku                     |
+|   10553 | WARTH      | Wartian Herkku                     |
+|   10583 | WARTH      | Wartian Herkku                     |
+|   10636 | WARTH      | Wartian Herkku                     |
+|   10750 | WARTH      | Wartian Herkku                     |
+|   10781 | WARTH      | Wartian Herkku                     |
+|   11025 | WARTH      | Wartian Herkku                     |
+|   10256 | WELLI      | Wellington Importadora             |
+|   10420 | WELLI      | Wellington Importadora             |
+|   10585 | WELLI      | Wellington Importadora             |
+|   10644 | WELLI      | Wellington Importadora             |
+|   10803 | WELLI      | Wellington Importadora             |
+|   10809 | WELLI      | Wellington Importadora             |
+|   10900 | WELLI      | Wellington Importadora             |
+|   10905 | WELLI      | Wellington Importadora             |
+|   10935 | WELLI      | Wellington Importadora             |
+|   10269 | WHITC      | White Clover Markets               |
+|   10344 | WHITC      | White Clover Markets               |
+|   10469 | WHITC      | White Clover Markets               |
+|   10483 | WHITC      | White Clover Markets               |
+|   10504 | WHITC      | White Clover Markets               |
+|   10596 | WHITC      | White Clover Markets               |
+|   10693 | WHITC      | White Clover Markets               |
+|   10696 | WHITC      | White Clover Markets               |
+|   10723 | WHITC      | White Clover Markets               |
+|   10740 | WHITC      | White Clover Markets               |
+|   10861 | WHITC      | White Clover Markets               |
+|   10904 | WHITC      | White Clover Markets               |
+|   11032 | WHITC      | White Clover Markets               |
+|   11066 | WHITC      | White Clover Markets               |
+|   10615 | WILMK      | Wilman Kala                        |
+|   10673 | WILMK      | Wilman Kala                        |
+|   10695 | WILMK      | Wilman Kala                        |
+|   10873 | WILMK      | Wilman Kala                        |
+|   10879 | WILMK      | Wilman Kala                        |
+|   10910 | WILMK      | Wilman Kala                        |
+|   11005 | WILMK      | Wilman Kala                        |
+|   10374 | WOLZA      | Wolski  Zajazd                     |
+|   10611 | WOLZA      | Wolski  Zajazd                     |
+|   10792 | WOLZA      | Wolski  Zajazd                     |
+|   10870 | WOLZA      | Wolski  Zajazd                     |
+|   10906 | WOLZA      | Wolski  Zajazd                     |
+|   10998 | WOLZA      | Wolski  Zajazd                     |
+|   11044 | WOLZA      | Wolski  Zajazd                     |
++---------+------------+------------------------------------+
+830 rows in set (0.0008 sec)
+
+ MySQL  localhost:3306  northwind  SQL > select a.orderid, b.customerid, b.companyname from orders a left join customers b on a.customerid = b.customerid
+                                     ... UNION ALL
+                                     ... select a.orderid, b.customerid, b.companyname from orders a right join customers b on a.customerid = b.customerid where a.customerid is null;
++---------+------------+--------------------------------------+
+| orderid | customerid | companyname                          |
++---------+------------+--------------------------------------+
+|   10261 | NULL       | NULL                                 |
+|   10262 | NULL       | NULL                                 |
+|   10263 | NULL       | NULL                                 |
+|   10264 | NULL       | NULL                                 |
+|   10643 | ALFKI      | Alfreds Futterkiste                  |
+|   10692 | ALFKI      | Alfreds Futterkiste                  |
+|   10702 | ALFKI      | Alfreds Futterkiste                  |
+|   10835 | ALFKI      | Alfreds Futterkiste                  |
+|   10952 | ALFKI      | Alfreds Futterkiste                  |
+|   11011 | ALFKI      | Alfreds Futterkiste                  |
+|   10308 | ANATR      | Ana Trujillo Emparedados y helados   |
+|   10625 | ANATR      | Ana Trujillo Emparedados y helados   |
+|   10759 | ANATR      | Ana Trujillo Emparedados y helados   |
+|   10926 | ANATR      | Ana Trujillo Emparedados y helados   |
+|   10365 | ANTON      | Antonio Moreno Taquera               |
+|   10507 | ANTON      | Antonio Moreno Taquera               |
+|   10535 | ANTON      | Antonio Moreno Taquera               |
+|   10573 | ANTON      | Antonio Moreno Taquera               |
+|   10677 | ANTON      | Antonio Moreno Taquera               |
+|   10682 | ANTON      | Antonio Moreno Taquera               |
+|   10856 | ANTON      | Antonio Moreno Taquera               |
+|   10355 | AROUT      | Around the Horn                      |
+|   10383 | AROUT      | Around the Horn                      |
+|   10453 | AROUT      | Around the Horn                      |
+|   10558 | AROUT      | Around the Horn                      |
+|   10707 | AROUT      | Around the Horn                      |
+|   10741 | AROUT      | Around the Horn                      |
+|   10743 | AROUT      | Around the Horn                      |
+|   10768 | AROUT      | Around the Horn                      |
+|   10793 | AROUT      | Around the Horn                      |
+|   10864 | AROUT      | Around the Horn                      |
+|   10920 | AROUT      | Around the Horn                      |
+|   10953 | AROUT      | Around the Horn                      |
+|   11016 | AROUT      | Around the Horn                      |
+|   10278 | BERGS      | Berglunds snabbkp                    |
+|   10280 | BERGS      | Berglunds snabbkp                    |
+|   10384 | BERGS      | Berglunds snabbkp                    |
+|   10444 | BERGS      | Berglunds snabbkp                    |
+|   10445 | BERGS      | Berglunds snabbkp                    |
+|   10524 | BERGS      | Berglunds snabbkp                    |
+|   10572 | BERGS      | Berglunds snabbkp                    |
+|   10626 | BERGS      | Berglunds snabbkp                    |
+|   10654 | BERGS      | Berglunds snabbkp                    |
+|   10672 | BERGS      | Berglunds snabbkp                    |
+|   10689 | BERGS      | Berglunds snabbkp                    |
+|   10733 | BERGS      | Berglunds snabbkp                    |
+|   10778 | BERGS      | Berglunds snabbkp                    |
+|   10837 | BERGS      | Berglunds snabbkp                    |
+|   10857 | BERGS      | Berglunds snabbkp                    |
+|   10866 | BERGS      | Berglunds snabbkp                    |
+|   10875 | BERGS      | Berglunds snabbkp                    |
+|   10924 | BERGS      | Berglunds snabbkp                    |
+|   10501 | BLAUS      | Blauer See Delikatessen              |
+|   10509 | BLAUS      | Blauer See Delikatessen              |
+|   10582 | BLAUS      | Blauer See Delikatessen              |
+|   10614 | BLAUS      | Blauer See Delikatessen              |
+|   10853 | BLAUS      | Blauer See Delikatessen              |
+|   10956 | BLAUS      | Blauer See Delikatessen              |
+|   11058 | BLAUS      | Blauer See Delikatessen              |
+|   10265 | BLONP      | Blondesddsl pre et fils              |
+|   10297 | BLONP      | Blondesddsl pre et fils              |
+|   10360 | BLONP      | Blondesddsl pre et fils              |
+|   10436 | BLONP      | Blondesddsl pre et fils              |
+|   10449 | BLONP      | Blondesddsl pre et fils              |
+|   10559 | BLONP      | Blondesddsl pre et fils              |
+|   10566 | BLONP      | Blondesddsl pre et fils              |
+|   10584 | BLONP      | Blondesddsl pre et fils              |
+|   10628 | BLONP      | Blondesddsl pre et fils              |
+|   10679 | BLONP      | Blondesddsl pre et fils              |
+|   10826 | BLONP      | Blondesddsl pre et fils              |
+|   10326 | BOLID      | Blido Comidas preparadas             |
+|   10801 | BOLID      | Blido Comidas preparadas             |
+|   10970 | BOLID      | Blido Comidas preparadas             |
+|   10331 | BONAP      | Bon app'                             |
+|   10340 | BONAP      | Bon app'                             |
+|   10362 | BONAP      | Bon app'                             |
+|   10470 | BONAP      | Bon app'                             |
+|   10511 | BONAP      | Bon app'                             |
+|   10525 | BONAP      | Bon app'                             |
+|   10663 | BONAP      | Bon app'                             |
+|   10715 | BONAP      | Bon app'                             |
+|   10730 | BONAP      | Bon app'                             |
+|   10732 | BONAP      | Bon app'                             |
+|   10755 | BONAP      | Bon app'                             |
+|   10827 | BONAP      | Bon app'                             |
+|   10871 | BONAP      | Bon app'                             |
+|   10876 | BONAP      | Bon app'                             |
+|   10932 | BONAP      | Bon app'                             |
+|   10940 | BONAP      | Bon app'                             |
+|   11076 | BONAP      | Bon app'                             |
+|   10389 | BOTTM      | Bottom-Dollar Markets                |
+|   10410 | BOTTM      | Bottom-Dollar Markets                |
+|   10411 | BOTTM      | Bottom-Dollar Markets                |
+|   10431 | BOTTM      | Bottom-Dollar Markets                |
+|   10492 | BOTTM      | Bottom-Dollar Markets                |
+|   10742 | BOTTM      | Bottom-Dollar Markets                |
+|   10918 | BOTTM      | Bottom-Dollar Markets                |
+|   10944 | BOTTM      | Bottom-Dollar Markets                |
+|   10949 | BOTTM      | Bottom-Dollar Markets                |
+|   10975 | BOTTM      | Bottom-Dollar Markets                |
+|   10982 | BOTTM      | Bottom-Dollar Markets                |
+|   11027 | BOTTM      | Bottom-Dollar Markets                |
+|   11045 | BOTTM      | Bottom-Dollar Markets                |
+|   11048 | BOTTM      | Bottom-Dollar Markets                |
+|   10289 | BSBEV      | B's Beverages                        |
+|   10471 | BSBEV      | B's Beverages                        |
+|   10484 | BSBEV      | B's Beverages                        |
+|   10538 | BSBEV      | B's Beverages                        |
+|   10539 | BSBEV      | B's Beverages                        |
+|   10578 | BSBEV      | B's Beverages                        |
+|   10599 | BSBEV      | B's Beverages                        |
+|   10943 | BSBEV      | B's Beverages                        |
+|   10947 | BSBEV      | B's Beverages                        |
+|   11023 | BSBEV      | B's Beverages                        |
+|   10521 | CACTU      | Cactus Comidas para llevar           |
+|   10782 | CACTU      | Cactus Comidas para llevar           |
+|   10819 | CACTU      | Cactus Comidas para llevar           |
+|   10881 | CACTU      | Cactus Comidas para llevar           |
+|   10937 | CACTU      | Cactus Comidas para llevar           |
+|   11054 | CACTU      | Cactus Comidas para llevar           |
+|   10259 | CENTC      | Centro comercial Moctezuma           |
+|   10254 | CHOPS      | Chop-suey Chinese                    |
+|   10370 | CHOPS      | Chop-suey Chinese                    |
+|   10519 | CHOPS      | Chop-suey Chinese                    |
+|   10731 | CHOPS      | Chop-suey Chinese                    |
+|   10746 | CHOPS      | Chop-suey Chinese                    |
+|   10966 | CHOPS      | Chop-suey Chinese                    |
+|   11029 | CHOPS      | Chop-suey Chinese                    |
+|   11041 | CHOPS      | Chop-suey Chinese                    |
+|   10290 | COMMI      | Comrcio Mineiro                      |
+|   10466 | COMMI      | Comrcio Mineiro                      |
+|   10494 | COMMI      | Comrcio Mineiro                      |
+|   10969 | COMMI      | Comrcio Mineiro                      |
+|   11042 | COMMI      | Comrcio Mineiro                      |
+|   10435 | CONSH      | Consolidated Holdings                |
+|   10462 | CONSH      | Consolidated Holdings                |
+|   10848 | CONSH      | Consolidated Holdings                |
+|   10363 | DRACD      | Drachenblut Delikatessen             |
+|   10391 | DRACD      | Drachenblut Delikatessen             |
+|   10797 | DRACD      | Drachenblut Delikatessen             |
+|   10825 | DRACD      | Drachenblut Delikatessen             |
+|   11036 | DRACD      | Drachenblut Delikatessen             |
+|   11067 | DRACD      | Drachenblut Delikatessen             |
+|   10311 | DUMON      | Du monde entier                      |
+|   10609 | DUMON      | Du monde entier                      |
+|   10683 | DUMON      | Du monde entier                      |
+|   10890 | DUMON      | Du monde entier                      |
+|   10364 | EASTC      | Eastern Connection                   |
+|   10400 | EASTC      | Eastern Connection                   |
+|   10532 | EASTC      | Eastern Connection                   |
+|   10726 | EASTC      | Eastern Connection                   |
+|   10987 | EASTC      | Eastern Connection                   |
+|   11024 | EASTC      | Eastern Connection                   |
+|   11047 | EASTC      | Eastern Connection                   |
+|   11056 | EASTC      | Eastern Connection                   |
+|   10258 | ERNSH      | Ernst Handel                         |
+|   10351 | ERNSH      | Ernst Handel                         |
+|   10368 | ERNSH      | Ernst Handel                         |
+|   10382 | ERNSH      | Ernst Handel                         |
+|   10390 | ERNSH      | Ernst Handel                         |
+|   10402 | ERNSH      | Ernst Handel                         |
+|   10403 | ERNSH      | Ernst Handel                         |
+|   10430 | ERNSH      | Ernst Handel                         |
+|   10442 | ERNSH      | Ernst Handel                         |
+|   10514 | ERNSH      | Ernst Handel                         |
+|   10571 | ERNSH      | Ernst Handel                         |
+|   10595 | ERNSH      | Ernst Handel                         |
+|   10633 | ERNSH      | Ernst Handel                         |
+|   10667 | ERNSH      | Ernst Handel                         |
+|   10698 | ERNSH      | Ernst Handel                         |
+|   10764 | ERNSH      | Ernst Handel                         |
+|   10771 | ERNSH      | Ernst Handel                         |
+|   10773 | ERNSH      | Ernst Handel                         |
+|   10776 | ERNSH      | Ernst Handel                         |
+|   10795 | ERNSH      | Ernst Handel                         |
+|   10836 | ERNSH      | Ernst Handel                         |
+|   10854 | ERNSH      | Ernst Handel                         |
+|   10895 | ERNSH      | Ernst Handel                         |
+|   10968 | ERNSH      | Ernst Handel                         |
+|   10979 | ERNSH      | Ernst Handel                         |
+|   10990 | ERNSH      | Ernst Handel                         |
+|   11008 | ERNSH      | Ernst Handel                         |
+|   11017 | ERNSH      | Ernst Handel                         |
+|   11072 | ERNSH      | Ernst Handel                         |
+|   10347 | FAMIA      | Familia Arquibaldo                   |
+|   10386 | FAMIA      | Familia Arquibaldo                   |
+|   10414 | FAMIA      | Familia Arquibaldo                   |
+|   10512 | FAMIA      | Familia Arquibaldo                   |
+|   10581 | FAMIA      | Familia Arquibaldo                   |
+|   10650 | FAMIA      | Familia Arquibaldo                   |
+|   10725 | FAMIA      | Familia Arquibaldo                   |
+|   10408 | FOLIG      | Folies gourmandes                    |
+|   10480 | FOLIG      | Folies gourmandes                    |
+|   10634 | FOLIG      | Folies gourmandes                    |
+|   10763 | FOLIG      | Folies gourmandes                    |
+|   10789 | FOLIG      | Folies gourmandes                    |
+|   10327 | FOLKO      | Folk och f HB                        |
+|   10378 | FOLKO      | Folk och f HB                        |
+|   10434 | FOLKO      | Folk och f HB                        |
+|   10460 | FOLKO      | Folk och f HB                        |
+|   10533 | FOLKO      | Folk och f HB                        |
+|   10561 | FOLKO      | Folk och f HB                        |
+|   10703 | FOLKO      | Folk och f HB                        |
+|   10762 | FOLKO      | Folk och f HB                        |
+|   10774 | FOLKO      | Folk och f HB                        |
+|   10824 | FOLKO      | Folk och f HB                        |
+|   10880 | FOLKO      | Folk och f HB                        |
+|   10902 | FOLKO      | Folk och f HB                        |
+|   10955 | FOLKO      | Folk och f HB                        |
+|   10977 | FOLKO      | Folk och f HB                        |
+|   10980 | FOLKO      | Folk och f HB                        |
+|   10993 | FOLKO      | Folk och f HB                        |
+|   11001 | FOLKO      | Folk och f HB                        |
+|   11050 | FOLKO      | Folk och f HB                        |
+|   10267 | FRANK      | Frankenversand                       |
+|   10337 | FRANK      | Frankenversand                       |
+|   10342 | FRANK      | Frankenversand                       |
+|   10396 | FRANK      | Frankenversand                       |
+|   10488 | FRANK      | Frankenversand                       |
+|   10560 | FRANK      | Frankenversand                       |
+|   10623 | FRANK      | Frankenversand                       |
+|   10653 | FRANK      | Frankenversand                       |
+|   10670 | FRANK      | Frankenversand                       |
+|   10675 | FRANK      | Frankenversand                       |
+|   10717 | FRANK      | Frankenversand                       |
+|   10791 | FRANK      | Frankenversand                       |
+|   10859 | FRANK      | Frankenversand                       |
+|   10929 | FRANK      | Frankenversand                       |
+|   11012 | FRANK      | Frankenversand                       |
+|   10671 | FRANR      | France restauration                  |
+|   10860 | FRANR      | France restauration                  |
+|   10971 | FRANR      | France restauration                  |
+|   10422 | FRANS      | Franchi S.p.A.                       |
+|   10710 | FRANS      | Franchi S.p.A.                       |
+|   10753 | FRANS      | Franchi S.p.A.                       |
+|   10807 | FRANS      | Franchi S.p.A.                       |
+|   11026 | FRANS      | Franchi S.p.A.                       |
+|   11060 | FRANS      | Franchi S.p.A.                       |
+|   10328 | FURIB      | Furia Bacalhau e Frutos do Mar       |
+|   10352 | FURIB      | Furia Bacalhau e Frutos do Mar       |
+|   10464 | FURIB      | Furia Bacalhau e Frutos do Mar       |
+|   10491 | FURIB      | Furia Bacalhau e Frutos do Mar       |
+|   10551 | FURIB      | Furia Bacalhau e Frutos do Mar       |
+|   10604 | FURIB      | Furia Bacalhau e Frutos do Mar       |
+|   10664 | FURIB      | Furia Bacalhau e Frutos do Mar       |
+|   10963 | FURIB      | Furia Bacalhau e Frutos do Mar       |
+|   10366 | GALED      | Galera del gastrnomo                 |
+|   10426 | GALED      | Galera del gastrnomo                 |
+|   10568 | GALED      | Galera del gastrnomo                 |
+|   10887 | GALED      | Galera del gastrnomo                 |
+|   10928 | GALED      | Galera del gastrnomo                 |
+|   10303 | GODOS      | Godos Cocina Tpica                   |
+|   10550 | GODOS      | Godos Cocina Tpica                   |
+|   10629 | GODOS      | Godos Cocina Tpica                   |
+|   10872 | GODOS      | Godos Cocina Tpica                   |
+|   10874 | GODOS      | Godos Cocina Tpica                   |
+|   10888 | GODOS      | Godos Cocina Tpica                   |
+|   10911 | GODOS      | Godos Cocina Tpica                   |
+|   10948 | GODOS      | Godos Cocina Tpica                   |
+|   11009 | GODOS      | Godos Cocina Tpica                   |
+|   11037 | GODOS      | Godos Cocina Tpica                   |
+|   10423 | GOURL      | Gourmet Lanchonetes                  |
+|   10652 | GOURL      | Gourmet Lanchonetes                  |
+|   10685 | GOURL      | Gourmet Lanchonetes                  |
+|   10709 | GOURL      | Gourmet Lanchonetes                  |
+|   10734 | GOURL      | Gourmet Lanchonetes                  |
+|   10777 | GOURL      | Gourmet Lanchonetes                  |
+|   10790 | GOURL      | Gourmet Lanchonetes                  |
+|   10959 | GOURL      | Gourmet Lanchonetes                  |
+|   11049 | GOURL      | Gourmet Lanchonetes                  |
+|   10528 | GREAL      | Great Lakes Food Market              |
+|   10589 | GREAL      | Great Lakes Food Market              |
+|   10616 | GREAL      | Great Lakes Food Market              |
+|   10617 | GREAL      | Great Lakes Food Market              |
+|   10656 | GREAL      | Great Lakes Food Market              |
+|   10681 | GREAL      | Great Lakes Food Market              |
+|   10816 | GREAL      | Great Lakes Food Market              |
+|   10936 | GREAL      | Great Lakes Food Market              |
+|   11006 | GREAL      | Great Lakes Food Market              |
+|   11040 | GREAL      | Great Lakes Food Market              |
+|   11061 | GREAL      | Great Lakes Food Market              |
+|   10268 | GROSR      | GROSELLA-Restaurante                 |
+|   10785 | GROSR      | GROSELLA-Restaurante                 |
+|   10250 | HANAR      | Hanari Carnes                        |
+|   10253 | HANAR      | Hanari Carnes                        |
+|   10541 | HANAR      | Hanari Carnes                        |
+|   10645 | HANAR      | Hanari Carnes                        |
+|   10690 | HANAR      | Hanari Carnes                        |
+|   10770 | HANAR      | Hanari Carnes                        |
+|   10783 | HANAR      | Hanari Carnes                        |
+|   10886 | HANAR      | Hanari Carnes                        |
+|   10903 | HANAR      | Hanari Carnes                        |
+|   10922 | HANAR      | Hanari Carnes                        |
+|   10925 | HANAR      | Hanari Carnes                        |
+|   10981 | HANAR      | Hanari Carnes                        |
+|   11022 | HANAR      | Hanari Carnes                        |
+|   11052 | HANAR      | Hanari Carnes                        |
+|   10257 | HILAA      | HILARION-Abastos                     |
+|   10395 | HILAA      | HILARION-Abastos                     |
+|   10476 | HILAA      | HILARION-Abastos                     |
+|   10486 | HILAA      | HILARION-Abastos                     |
+|   10490 | HILAA      | HILARION-Abastos                     |
+|   10498 | HILAA      | HILARION-Abastos                     |
+|   10552 | HILAA      | HILARION-Abastos                     |
+|   10601 | HILAA      | HILARION-Abastos                     |
+|   10613 | HILAA      | HILARION-Abastos                     |
+|   10641 | HILAA      | HILARION-Abastos                     |
+|   10705 | HILAA      | HILARION-Abastos                     |
+|   10796 | HILAA      | HILARION-Abastos                     |
+|   10863 | HILAA      | HILARION-Abastos                     |
+|   10901 | HILAA      | HILARION-Abastos                     |
+|   10957 | HILAA      | HILARION-Abastos                     |
+|   10960 | HILAA      | HILARION-Abastos                     |
+|   10976 | HILAA      | HILARION-Abastos                     |
+|   11055 | HILAA      | HILARION-Abastos                     |
+|   10375 | HUNGC      | Hungry Coyote Import Store           |
+|   10394 | HUNGC      | Hungry Coyote Import Store           |
+|   10415 | HUNGC      | Hungry Coyote Import Store           |
+|   10600 | HUNGC      | Hungry Coyote Import Store           |
+|   10660 | HUNGC      | Hungry Coyote Import Store           |
+|   10298 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10309 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10335 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10373 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10380 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10429 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10503 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10516 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10567 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10646 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10661 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10687 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10701 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10712 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10736 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10897 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10912 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10985 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   11063 | HUNGO      | Hungry Owl All-Night Grocers         |
+|   10315 | ISLAT      | Island Trading                       |
+|   10318 | ISLAT      | Island Trading                       |
+|   10321 | ISLAT      | Island Trading                       |
+|   10473 | ISLAT      | Island Trading                       |
+|   10621 | ISLAT      | Island Trading                       |
+|   10674 | ISLAT      | Island Trading                       |
+|   10749 | ISLAT      | Island Trading                       |
+|   10798 | ISLAT      | Island Trading                       |
+|   10829 | ISLAT      | Island Trading                       |
+|   10933 | ISLAT      | Island Trading                       |
+|   10323 | KOENE      | Kniglich Essen                       |
+|   10325 | KOENE      | Kniglich Essen                       |
+|   10456 | KOENE      | Kniglich Essen                       |
+|   10457 | KOENE      | Kniglich Essen                       |
+|   10468 | KOENE      | Kniglich Essen                       |
+|   10506 | KOENE      | Kniglich Essen                       |
+|   10542 | KOENE      | Kniglich Essen                       |
+|   10630 | KOENE      | Kniglich Essen                       |
+|   10718 | KOENE      | Kniglich Essen                       |
+|   10799 | KOENE      | Kniglich Essen                       |
+|   10817 | KOENE      | Kniglich Essen                       |
+|   10849 | KOENE      | Kniglich Essen                       |
+|   10893 | KOENE      | Kniglich Essen                       |
+|   11028 | KOENE      | Kniglich Essen                       |
+|   10858 | LACOR      | La corne d'abondance                 |
+|   10927 | LACOR      | La corne d'abondance                 |
+|   10972 | LACOR      | La corne d'abondance                 |
+|   10973 | LACOR      | La corne d'abondance                 |
+|   10350 | LAMAI      | La maison d'Asie                     |
+|   10358 | LAMAI      | La maison d'Asie                     |
+|   10371 | LAMAI      | La maison d'Asie                     |
+|   10413 | LAMAI      | La maison d'Asie                     |
+|   10425 | LAMAI      | La maison d'Asie                     |
+|   10454 | LAMAI      | La maison d'Asie                     |
+|   10493 | LAMAI      | La maison d'Asie                     |
+|   10500 | LAMAI      | La maison d'Asie                     |
+|   10610 | LAMAI      | La maison d'Asie                     |
+|   10631 | LAMAI      | La maison d'Asie                     |
+|   10787 | LAMAI      | La maison d'Asie                     |
+|   10832 | LAMAI      | La maison d'Asie                     |
+|   10923 | LAMAI      | La maison d'Asie                     |
+|   11051 | LAMAI      | La maison d'Asie                     |
+|   10495 | LAUGB      | Laughing Bacchus Wine Cellars        |
+|   10620 | LAUGB      | Laughing Bacchus Wine Cellars        |
+|   10810 | LAUGB      | Laughing Bacchus Wine Cellars        |
+|   10482 | LAZYK      | Lazy K Kountry Store                 |
+|   10545 | LAZYK      | Lazy K Kountry Store                 |
+|   10279 | LEHMS      | Lehmanns Marktstand                  |
+|   10284 | LEHMS      | Lehmanns Marktstand                  |
+|   10343 | LEHMS      | Lehmanns Marktstand                  |
+|   10497 | LEHMS      | Lehmanns Marktstand                  |
+|   10522 | LEHMS      | Lehmanns Marktstand                  |
+|   10534 | LEHMS      | Lehmanns Marktstand                  |
+|   10536 | LEHMS      | Lehmanns Marktstand                  |
+|   10557 | LEHMS      | Lehmanns Marktstand                  |
+|   10592 | LEHMS      | Lehmanns Marktstand                  |
+|   10593 | LEHMS      | Lehmanns Marktstand                  |
+|   10772 | LEHMS      | Lehmanns Marktstand                  |
+|   10862 | LEHMS      | Lehmanns Marktstand                  |
+|   10891 | LEHMS      | Lehmanns Marktstand                  |
+|   10934 | LEHMS      | Lehmanns Marktstand                  |
+|   11070 | LEHMS      | Lehmanns Marktstand                  |
+|   10579 | LETSS      | Let's Stop N Shop                    |
+|   10719 | LETSS      | Let's Stop N Shop                    |
+|   10735 | LETSS      | Let's Stop N Shop                    |
+|   10884 | LETSS      | Let's Stop N Shop                    |
+|   10283 | LILAS      | LILA-Supermercado                    |
+|   10296 | LILAS      | LILA-Supermercado                    |
+|   10330 | LILAS      | LILA-Supermercado                    |
+|   10357 | LILAS      | LILA-Supermercado                    |
+|   10381 | LILAS      | LILA-Supermercado                    |
+|   10461 | LILAS      | LILA-Supermercado                    |
+|   10499 | LILAS      | LILA-Supermercado                    |
+|   10543 | LILAS      | LILA-Supermercado                    |
+|   10780 | LILAS      | LILA-Supermercado                    |
+|   10823 | LILAS      | LILA-Supermercado                    |
+|   10899 | LILAS      | LILA-Supermercado                    |
+|   10997 | LILAS      | LILA-Supermercado                    |
+|   11065 | LILAS      | LILA-Supermercado                    |
+|   11071 | LILAS      | LILA-Supermercado                    |
+|   11078 | LILAS      | LILA-Supermercado                    |
+|   10405 | LINOD      | LINO-Delicateses                     |
+|   10485 | LINOD      | LINO-Delicateses                     |
+|   10638 | LINOD      | LINO-Delicateses                     |
+|   10697 | LINOD      | LINO-Delicateses                     |
+|   10729 | LINOD      | LINO-Delicateses                     |
+|   10811 | LINOD      | LINO-Delicateses                     |
+|   10838 | LINOD      | LINO-Delicateses                     |
+|   10840 | LINOD      | LINO-Delicateses                     |
+|   10919 | LINOD      | LINO-Delicateses                     |
+|   10954 | LINOD      | LINO-Delicateses                     |
+|   11014 | LINOD      | LINO-Delicateses                     |
+|   11039 | LINOD      | LINO-Delicateses                     |
+|   10307 | LONEP      | Lonesome Pine Restaurant             |
+|   10317 | LONEP      | Lonesome Pine Restaurant             |
+|   10544 | LONEP      | Lonesome Pine Restaurant             |
+|   10662 | LONEP      | Lonesome Pine Restaurant             |
+|   10665 | LONEP      | Lonesome Pine Restaurant             |
+|   10867 | LONEP      | Lonesome Pine Restaurant             |
+|   10883 | LONEP      | Lonesome Pine Restaurant             |
+|   11018 | LONEP      | Lonesome Pine Restaurant             |
+|   10275 | MAGAA      | Magazzini Alimentari Riuniti         |
+|   10300 | MAGAA      | Magazzini Alimentari Riuniti         |
+|   10404 | MAGAA      | Magazzini Alimentari Riuniti         |
+|   10467 | MAGAA      | Magazzini Alimentari Riuniti         |
+|   10635 | MAGAA      | Magazzini Alimentari Riuniti         |
+|   10754 | MAGAA      | Magazzini Alimentari Riuniti         |
+|   10784 | MAGAA      | Magazzini Alimentari Riuniti         |
+|   10818 | MAGAA      | Magazzini Alimentari Riuniti         |
+|   10939 | MAGAA      | Magazzini Alimentari Riuniti         |
+|   10950 | MAGAA      | Magazzini Alimentari Riuniti         |
+|   10529 | MAISD      | Maison Dewey                         |
+|   10649 | MAISD      | Maison Dewey                         |
+|   10760 | MAISD      | Maison Dewey                         |
+|   10892 | MAISD      | Maison Dewey                         |
+|   10896 | MAISD      | Maison Dewey                         |
+|   10978 | MAISD      | Maison Dewey                         |
+|   11004 | MAISD      | Maison Dewey                         |
+|   10332 | MEREP      | Mre Paillarde                        |
+|   10339 | MEREP      | Mre Paillarde                        |
+|   10376 | MEREP      | Mre Paillarde                        |
+|   10424 | MEREP      | Mre Paillarde                        |
+|   10439 | MEREP      | Mre Paillarde                        |
+|   10505 | MEREP      | Mre Paillarde                        |
+|   10565 | MEREP      | Mre Paillarde                        |
+|   10570 | MEREP      | Mre Paillarde                        |
+|   10590 | MEREP      | Mre Paillarde                        |
+|   10605 | MEREP      | Mre Paillarde                        |
+|   10618 | MEREP      | Mre Paillarde                        |
+|   10619 | MEREP      | Mre Paillarde                        |
+|   10724 | MEREP      | Mre Paillarde                        |
+|   10277 | MORGK      | Morgenstern Gesundkost               |
+|   10575 | MORGK      | Morgenstern Gesundkost               |
+|   10699 | MORGK      | Morgenstern Gesundkost               |
+|   10779 | MORGK      | Morgenstern Gesundkost               |
+|   10945 | MORGK      | Morgenstern Gesundkost               |
+|   10517 | NORTS      | North/South                          |
+|   10752 | NORTS      | North/South                          |
+|   11057 | NORTS      | North/South                          |
+|   10409 | OCEAN      | Ocano Atlntico Ltda.                 |
+|   10531 | OCEAN      | Ocano Atlntico Ltda.                 |
+|   10898 | OCEAN      | Ocano Atlntico Ltda.                 |
+|   10958 | OCEAN      | Ocano Atlntico Ltda.                 |
+|   10986 | OCEAN      | Ocano Atlntico Ltda.                 |
+|   10305 | OLDWO      | Old World Delicatessen               |
+|   10338 | OLDWO      | Old World Delicatessen               |
+|   10441 | OLDWO      | Old World Delicatessen               |
+|   10594 | OLDWO      | Old World Delicatessen               |
+|   10680 | OLDWO      | Old World Delicatessen               |
+|   10706 | OLDWO      | Old World Delicatessen               |
+|   10808 | OLDWO      | Old World Delicatessen               |
+|   10855 | OLDWO      | Old World Delicatessen               |
+|   10965 | OLDWO      | Old World Delicatessen               |
+|   11034 | OLDWO      | Old World Delicatessen               |
+|   10260 | OTTIK      | Ottilies Kseladen                    |
+|   10407 | OTTIK      | Ottilies Kseladen                    |
+|   10508 | OTTIK      | Ottilies Kseladen                    |
+|   10554 | OTTIK      | Ottilies Kseladen                    |
+|   10580 | OTTIK      | Ottilies Kseladen                    |
+|   10684 | OTTIK      | Ottilies Kseladen                    |
+|   10766 | OTTIK      | Ottilies Kseladen                    |
+|   10833 | OTTIK      | Ottilies Kseladen                    |
+|   10999 | OTTIK      | Ottilies Kseladen                    |
+|   11020 | OTTIK      | Ottilies Kseladen                    |
+|   10322 | PERIC      | Pericles Comidas clsicas             |
+|   10354 | PERIC      | Pericles Comidas clsicas             |
+|   10474 | PERIC      | Pericles Comidas clsicas             |
+|   10502 | PERIC      | Pericles Comidas clsicas             |
+|   10995 | PERIC      | Pericles Comidas clsicas             |
+|   11073 | PERIC      | Pericles Comidas clsicas             |
+|   10353 | PICCO      | Piccolo und mehr                     |
+|   10392 | PICCO      | Piccolo und mehr                     |
+|   10427 | PICCO      | Piccolo und mehr                     |
+|   10489 | PICCO      | Piccolo und mehr                     |
+|   10530 | PICCO      | Piccolo und mehr                     |
+|   10597 | PICCO      | Piccolo und mehr                     |
+|   10686 | PICCO      | Piccolo und mehr                     |
+|   10747 | PICCO      | Piccolo und mehr                     |
+|   10844 | PICCO      | Piccolo und mehr                     |
+|   11053 | PICCO      | Piccolo und mehr                     |
+|   10336 | PRINI      | Princesa Isabel Vinhos               |
+|   10397 | PRINI      | Princesa Isabel Vinhos               |
+|   10433 | PRINI      | Princesa Isabel Vinhos               |
+|   10477 | PRINI      | Princesa Isabel Vinhos               |
+|   11007 | PRINI      | Princesa Isabel Vinhos               |
+|   10291 | QUEDE      | Que Delcia                           |
+|   10379 | QUEDE      | Que Delcia                           |
+|   10421 | QUEDE      | Que Delcia                           |
+|   10587 | QUEDE      | Que Delcia                           |
+|   10647 | QUEDE      | Que Delcia                           |
+|   10720 | QUEDE      | Que Delcia                           |
+|   10794 | QUEDE      | Que Delcia                           |
+|   10989 | QUEDE      | Que Delcia                           |
+|   10372 | QUEEN      | Queen Cozinha                        |
+|   10406 | QUEEN      | Queen Cozinha                        |
+|   10487 | QUEEN      | Queen Cozinha                        |
+|   10637 | QUEEN      | Queen Cozinha                        |
+|   10659 | QUEEN      | Queen Cozinha                        |
+|   10704 | QUEEN      | Queen Cozinha                        |
+|   10728 | QUEEN      | Queen Cozinha                        |
+|   10786 | QUEEN      | Queen Cozinha                        |
+|   10868 | QUEEN      | Queen Cozinha                        |
+|   10913 | QUEEN      | Queen Cozinha                        |
+|   10914 | QUEEN      | Queen Cozinha                        |
+|   10961 | QUEEN      | Queen Cozinha                        |
+|   11068 | QUEEN      | Queen Cozinha                        |
+|   10273 | QUICK      | QUICK-Stop                           |
+|   10285 | QUICK      | QUICK-Stop                           |
+|   10286 | QUICK      | QUICK-Stop                           |
+|   10313 | QUICK      | QUICK-Stop                           |
+|   10345 | QUICK      | QUICK-Stop                           |
+|   10361 | QUICK      | QUICK-Stop                           |
+|   10418 | QUICK      | QUICK-Stop                           |
+|   10451 | QUICK      | QUICK-Stop                           |
+|   10515 | QUICK      | QUICK-Stop                           |
+|   10527 | QUICK      | QUICK-Stop                           |
+|   10540 | QUICK      | QUICK-Stop                           |
+|   10549 | QUICK      | QUICK-Stop                           |
+|   10588 | QUICK      | QUICK-Stop                           |
+|   10658 | QUICK      | QUICK-Stop                           |
+|   10691 | QUICK      | QUICK-Stop                           |
+|   10694 | QUICK      | QUICK-Stop                           |
+|   10721 | QUICK      | QUICK-Stop                           |
+|   10745 | QUICK      | QUICK-Stop                           |
+|   10765 | QUICK      | QUICK-Stop                           |
+|   10788 | QUICK      | QUICK-Stop                           |
+|   10845 | QUICK      | QUICK-Stop                           |
+|   10865 | QUICK      | QUICK-Stop                           |
+|   10878 | QUICK      | QUICK-Stop                           |
+|   10938 | QUICK      | QUICK-Stop                           |
+|   10962 | QUICK      | QUICK-Stop                           |
+|   10991 | QUICK      | QUICK-Stop                           |
+|   10996 | QUICK      | QUICK-Stop                           |
+|   11021 | QUICK      | QUICK-Stop                           |
+|   10448 | RANCH      | Rancho grande                        |
+|   10716 | RANCH      | Rancho grande                        |
+|   10828 | RANCH      | Rancho grande                        |
+|   10916 | RANCH      | Rancho grande                        |
+|   11019 | RANCH      | Rancho grande                        |
+|   10272 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10294 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10314 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10316 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10346 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10401 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10479 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10564 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10569 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10598 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10761 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10820 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10852 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10889 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10988 | RATTC      | Rattlesnake Canyon Grocery           |
+|   11000 | RATTC      | Rattlesnake Canyon Grocery           |
+|   11077 | RATTC      | Rattlesnake Canyon Grocery           |
+|   10288 | REGGC      | Reggiani Caseifici                   |
+|   10428 | REGGC      | Reggiani Caseifici                   |
+|   10443 | REGGC      | Reggiani Caseifici                   |
+|   10562 | REGGC      | Reggiani Caseifici                   |
+|   10586 | REGGC      | Reggiani Caseifici                   |
+|   10655 | REGGC      | Reggiani Caseifici                   |
+|   10727 | REGGC      | Reggiani Caseifici                   |
+|   10812 | REGGC      | Reggiani Caseifici                   |
+|   10908 | REGGC      | Reggiani Caseifici                   |
+|   10942 | REGGC      | Reggiani Caseifici                   |
+|   11010 | REGGC      | Reggiani Caseifici                   |
+|   11062 | REGGC      | Reggiani Caseifici                   |
+|   10287 | RICAR      | Ricardo Adocicados                   |
+|   10299 | RICAR      | Ricardo Adocicados                   |
+|   10447 | RICAR      | Ricardo Adocicados                   |
+|   10481 | RICAR      | Ricardo Adocicados                   |
+|   10563 | RICAR      | Ricardo Adocicados                   |
+|   10622 | RICAR      | Ricardo Adocicados                   |
+|   10648 | RICAR      | Ricardo Adocicados                   |
+|   10813 | RICAR      | Ricardo Adocicados                   |
+|   10851 | RICAR      | Ricardo Adocicados                   |
+|   10877 | RICAR      | Ricardo Adocicados                   |
+|   11059 | RICAR      | Ricardo Adocicados                   |
+|   10255 | RICSU      | Richter Supermarkt                   |
+|   10419 | RICSU      | Richter Supermarkt                   |
+|   10537 | RICSU      | Richter Supermarkt                   |
+|   10666 | RICSU      | Richter Supermarkt                   |
+|   10751 | RICSU      | Richter Supermarkt                   |
+|   10758 | RICSU      | Richter Supermarkt                   |
+|   10931 | RICSU      | Richter Supermarkt                   |
+|   10951 | RICSU      | Richter Supermarkt                   |
+|   11033 | RICSU      | Richter Supermarkt                   |
+|   11075 | RICSU      | Richter Supermarkt                   |
+|   10281 | ROMEY      | Romero y tomillo                     |
+|   10282 | ROMEY      | Romero y tomillo                     |
+|   10306 | ROMEY      | Romero y tomillo                     |
+|   10917 | ROMEY      | Romero y tomillo                     |
+|   11013 | ROMEY      | Romero y tomillo                     |
+|   10387 | SANTG      | Sant Gourmet                         |
+|   10520 | SANTG      | Sant Gourmet                         |
+|   10639 | SANTG      | Sant Gourmet                         |
+|   10831 | SANTG      | Sant Gourmet                         |
+|   10909 | SANTG      | Sant Gourmet                         |
+|   11015 | SANTG      | Sant Gourmet                         |
+|   10324 | SAVEA      | Save-a-lot Markets                   |
+|   10393 | SAVEA      | Save-a-lot Markets                   |
+|   10398 | SAVEA      | Save-a-lot Markets                   |
+|   10440 | SAVEA      | Save-a-lot Markets                   |
+|   10452 | SAVEA      | Save-a-lot Markets                   |
+|   10510 | SAVEA      | Save-a-lot Markets                   |
+|   10555 | SAVEA      | Save-a-lot Markets                   |
+|   10603 | SAVEA      | Save-a-lot Markets                   |
+|   10607 | SAVEA      | Save-a-lot Markets                   |
+|   10612 | SAVEA      | Save-a-lot Markets                   |
+|   10627 | SAVEA      | Save-a-lot Markets                   |
+|   10657 | SAVEA      | Save-a-lot Markets                   |
+|   10678 | SAVEA      | Save-a-lot Markets                   |
+|   10700 | SAVEA      | Save-a-lot Markets                   |
+|   10711 | SAVEA      | Save-a-lot Markets                   |
+|   10713 | SAVEA      | Save-a-lot Markets                   |
+|   10714 | SAVEA      | Save-a-lot Markets                   |
+|   10722 | SAVEA      | Save-a-lot Markets                   |
+|   10748 | SAVEA      | Save-a-lot Markets                   |
+|   10757 | SAVEA      | Save-a-lot Markets                   |
+|   10815 | SAVEA      | Save-a-lot Markets                   |
+|   10847 | SAVEA      | Save-a-lot Markets                   |
+|   10882 | SAVEA      | Save-a-lot Markets                   |
+|   10894 | SAVEA      | Save-a-lot Markets                   |
+|   10941 | SAVEA      | Save-a-lot Markets                   |
+|   10983 | SAVEA      | Save-a-lot Markets                   |
+|   10984 | SAVEA      | Save-a-lot Markets                   |
+|   11002 | SAVEA      | Save-a-lot Markets                   |
+|   11030 | SAVEA      | Save-a-lot Markets                   |
+|   11031 | SAVEA      | Save-a-lot Markets                   |
+|   11064 | SAVEA      | Save-a-lot Markets                   |
+|   10359 | SEVES      | Seven Seas Imports                   |
+|   10377 | SEVES      | Seven Seas Imports                   |
+|   10388 | SEVES      | Seven Seas Imports                   |
+|   10472 | SEVES      | Seven Seas Imports                   |
+|   10523 | SEVES      | Seven Seas Imports                   |
+|   10547 | SEVES      | Seven Seas Imports                   |
+|   10800 | SEVES      | Seven Seas Imports                   |
+|   10804 | SEVES      | Seven Seas Imports                   |
+|   10869 | SEVES      | Seven Seas Imports                   |
+|   10341 | SIMOB      | Simons bistro                        |
+|   10417 | SIMOB      | Simons bistro                        |
+|   10556 | SIMOB      | Simons bistro                        |
+|   10642 | SIMOB      | Simons bistro                        |
+|   10669 | SIMOB      | Simons bistro                        |
+|   10802 | SIMOB      | Simons bistro                        |
+|   11074 | SIMOB      | Simons bistro                        |
+|   10738 | SPECD      | Spcialits du monde                   |
+|   10907 | SPECD      | Spcialits du monde                   |
+|   10964 | SPECD      | Spcialits du monde                   |
+|   11043 | SPECD      | Spcialits du monde                   |
+|   10271 | SPLIR      | Split Rail Beer & Ale                |
+|   10329 | SPLIR      | Split Rail Beer & Ale                |
+|   10349 | SPLIR      | Split Rail Beer & Ale                |
+|   10369 | SPLIR      | Split Rail Beer & Ale                |
+|   10385 | SPLIR      | Split Rail Beer & Ale                |
+|   10432 | SPLIR      | Split Rail Beer & Ale                |
+|   10756 | SPLIR      | Split Rail Beer & Ale                |
+|   10821 | SPLIR      | Split Rail Beer & Ale                |
+|   10974 | SPLIR      | Split Rail Beer & Ale                |
+|   10252 | SUPRD      | Suprmes dlices                       |
+|   10302 | SUPRD      | Suprmes dlices                       |
+|   10458 | SUPRD      | Suprmes dlices                       |
+|   10463 | SUPRD      | Suprmes dlices                       |
+|   10475 | SUPRD      | Suprmes dlices                       |
+|   10767 | SUPRD      | Suprmes dlices                       |
+|   10841 | SUPRD      | Suprmes dlices                       |
+|   10846 | SUPRD      | Suprmes dlices                       |
+|   10885 | SUPRD      | Suprmes dlices                       |
+|   10930 | SUPRD      | Suprmes dlices                       |
+|   11035 | SUPRD      | Suprmes dlices                       |
+|   11038 | SUPRD      | Suprmes dlices                       |
+|   10310 | THEBI      | The Big Cheese                       |
+|   10708 | THEBI      | The Big Cheese                       |
+|   10805 | THEBI      | The Big Cheese                       |
+|   10992 | THEBI      | The Big Cheese                       |
+|   10624 | THECR      | The Cracker Box                      |
+|   10775 | THECR      | The Cracker Box                      |
+|   11003 | THECR      | The Cracker Box                      |
+|   10249 | TOMSP      | Toms Spezialitten                    |
+|   10438 | TOMSP      | Toms Spezialitten                    |
+|   10446 | TOMSP      | Toms Spezialitten                    |
+|   10548 | TOMSP      | Toms Spezialitten                    |
+|   10608 | TOMSP      | Toms Spezialitten                    |
+|   10967 | TOMSP      | Toms Spezialitten                    |
+|   10276 | TORTU      | Tortuga Restaurante                  |
+|   10293 | TORTU      | Tortuga Restaurante                  |
+|   10304 | TORTU      | Tortuga Restaurante                  |
+|   10319 | TORTU      | Tortuga Restaurante                  |
+|   10518 | TORTU      | Tortuga Restaurante                  |
+|   10576 | TORTU      | Tortuga Restaurante                  |
+|   10676 | TORTU      | Tortuga Restaurante                  |
+|   10842 | TORTU      | Tortuga Restaurante                  |
+|   10915 | TORTU      | Tortuga Restaurante                  |
+|   11069 | TORTU      | Tortuga Restaurante                  |
+|   10292 | TRADH      | Tradio Hipermercados                 |
+|   10496 | TRADH      | Tradio Hipermercados                 |
+|   10606 | TRADH      | Tradio Hipermercados                 |
+|   10830 | TRADH      | Tradio Hipermercados                 |
+|   10834 | TRADH      | Tradio Hipermercados                 |
+|   10839 | TRADH      | Tradio Hipermercados                 |
+|   10574 | TRAIH      | Trail's Head Gourmet Provisioners    |
+|   10577 | TRAIH      | Trail's Head Gourmet Provisioners    |
+|   10822 | TRAIH      | Trail's Head Gourmet Provisioners    |
+|   10367 | VAFFE      | Vaffeljernet                         |
+|   10399 | VAFFE      | Vaffeljernet                         |
+|   10465 | VAFFE      | Vaffeljernet                         |
+|   10591 | VAFFE      | Vaffeljernet                         |
+|   10602 | VAFFE      | Vaffeljernet                         |
+|   10688 | VAFFE      | Vaffeljernet                         |
+|   10744 | VAFFE      | Vaffeljernet                         |
+|   10769 | VAFFE      | Vaffeljernet                         |
+|   10921 | VAFFE      | Vaffeljernet                         |
+|   10946 | VAFFE      | Vaffeljernet                         |
+|   10994 | VAFFE      | Vaffeljernet                         |
+|   10251 | VICTE      | Victuailles en stock                 |
+|   10334 | VICTE      | Victuailles en stock                 |
+|   10450 | VICTE      | Victuailles en stock                 |
+|   10459 | VICTE      | Victuailles en stock                 |
+|   10478 | VICTE      | Victuailles en stock                 |
+|   10546 | VICTE      | Victuailles en stock                 |
+|   10806 | VICTE      | Victuailles en stock                 |
+|   10814 | VICTE      | Victuailles en stock                 |
+|   10843 | VICTE      | Victuailles en stock                 |
+|   10850 | VICTE      | Victuailles en stock                 |
+|   10248 | VINET      | Vins et alcools Chevalier            |
+|   10274 | VINET      | Vins et alcools Chevalier            |
+|   10295 | VINET      | Vins et alcools Chevalier            |
+|   10737 | VINET      | Vins et alcools Chevalier            |
+|   10739 | VINET      | Vins et alcools Chevalier            |
+|   10301 | WANDK      | Die Wandernde Kuh                    |
+|   10312 | WANDK      | Die Wandernde Kuh                    |
+|   10348 | WANDK      | Die Wandernde Kuh                    |
+|   10356 | WANDK      | Die Wandernde Kuh                    |
+|   10513 | WANDK      | Die Wandernde Kuh                    |
+|   10632 | WANDK      | Die Wandernde Kuh                    |
+|   10640 | WANDK      | Die Wandernde Kuh                    |
+|   10651 | WANDK      | Die Wandernde Kuh                    |
+|   10668 | WANDK      | Die Wandernde Kuh                    |
+|   11046 | WANDK      | Die Wandernde Kuh                    |
+|   10266 | WARTH      | Wartian Herkku                       |
+|   10270 | WARTH      | Wartian Herkku                       |
+|   10320 | WARTH      | Wartian Herkku                       |
+|   10333 | WARTH      | Wartian Herkku                       |
+|   10412 | WARTH      | Wartian Herkku                       |
+|   10416 | WARTH      | Wartian Herkku                       |
+|   10437 | WARTH      | Wartian Herkku                       |
+|   10455 | WARTH      | Wartian Herkku                       |
+|   10526 | WARTH      | Wartian Herkku                       |
+|   10553 | WARTH      | Wartian Herkku                       |
+|   10583 | WARTH      | Wartian Herkku                       |
+|   10636 | WARTH      | Wartian Herkku                       |
+|   10750 | WARTH      | Wartian Herkku                       |
+|   10781 | WARTH      | Wartian Herkku                       |
+|   11025 | WARTH      | Wartian Herkku                       |
+|   10256 | WELLI      | Wellington Importadora               |
+|   10420 | WELLI      | Wellington Importadora               |
+|   10585 | WELLI      | Wellington Importadora               |
+|   10644 | WELLI      | Wellington Importadora               |
+|   10803 | WELLI      | Wellington Importadora               |
+|   10809 | WELLI      | Wellington Importadora               |
+|   10900 | WELLI      | Wellington Importadora               |
+|   10905 | WELLI      | Wellington Importadora               |
+|   10935 | WELLI      | Wellington Importadora               |
+|   10269 | WHITC      | White Clover Markets                 |
+|   10344 | WHITC      | White Clover Markets                 |
+|   10469 | WHITC      | White Clover Markets                 |
+|   10483 | WHITC      | White Clover Markets                 |
+|   10504 | WHITC      | White Clover Markets                 |
+|   10596 | WHITC      | White Clover Markets                 |
+|   10693 | WHITC      | White Clover Markets                 |
+|   10696 | WHITC      | White Clover Markets                 |
+|   10723 | WHITC      | White Clover Markets                 |
+|   10740 | WHITC      | White Clover Markets                 |
+|   10861 | WHITC      | White Clover Markets                 |
+|   10904 | WHITC      | White Clover Markets                 |
+|   11032 | WHITC      | White Clover Markets                 |
+|   11066 | WHITC      | White Clover Markets                 |
+|   10615 | WILMK      | Wilman Kala                          |
+|   10673 | WILMK      | Wilman Kala                          |
+|   10695 | WILMK      | Wilman Kala                          |
+|   10873 | WILMK      | Wilman Kala                          |
+|   10879 | WILMK      | Wilman Kala                          |
+|   10910 | WILMK      | Wilman Kala                          |
+|   11005 | WILMK      | Wilman Kala                          |
+|   10374 | WOLZA      | Wolski  Zajazd                       |
+|   10611 | WOLZA      | Wolski  Zajazd                       |
+|   10792 | WOLZA      | Wolski  Zajazd                       |
+|   10870 | WOLZA      | Wolski  Zajazd                       |
+|   10906 | WOLZA      | Wolski  Zajazd                       |
+|   10998 | WOLZA      | Wolski  Zajazd                       |
+|   11044 | WOLZA      | Wolski  Zajazd                       |
+|    NULL | FISSA      | FISSA Fabrica Inter. Salchichas S.A. |
+|    NULL | Val2       | IT                                   |
+|    NULL | VALON      | IT                                   |
+|    NULL | PARIS      | Paris spcialits                      |
++---------+------------+--------------------------------------+
+835 rows in set (0.0023 sec)
+
+ MySQL  localhost:3306  northwind  SQL >
